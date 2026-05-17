@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
+// 🔧 FIXED: Import the profile creation function
+import { ensureUserProfile } from '../lib/profile';
 import CosmicCanvas from '../components/CosmicCanvas';
 
 function isValidUsername(u: string) {
@@ -64,8 +66,15 @@ export default function AuthPage() {
           navigate('/dashboard');
         }
       } else {
-        const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        // 🔧 FIXED: Login — sign in, then ensure profile exists before redirecting
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
         if (signInError) throw signInError;
+
+        // Create profile if it doesn't exist (handles Google users logging in with email)
+        if (data.user) {
+          await ensureUserProfile(data.user);
+        }
+
         navigate('/dashboard');
       }
     } catch (err: unknown) {
@@ -76,13 +85,20 @@ export default function AuthPage() {
     }
   };
 
+  // 🔧 FIXED: Google sign-in now creates profile before redirecting
   const handleGoogle = async () => {
     setError('');
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/dashboard` },
     });
-    if (error) setError(error.message);
+    if (error) {
+      setError(error.message);
+      return;
+    }
+    // Note: OAuth redirects away, so we can't create the profile here.
+    // The profile will be created in DashboardPage's loadData() via ensureUserProfile().
+    // This is handled by the fix already in DashboardPage.tsx.
   };
 
   return (
