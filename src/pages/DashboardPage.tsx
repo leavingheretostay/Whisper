@@ -5,6 +5,8 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/useAuth';
 import type { Profile, Message } from '../lib/types';
 import CosmicCanvas from '../components/CosmicCanvas';
+// 🔧 FIXED: Import the profile creation function
+import { ensureUserProfile } from '../lib/profile';
 
 const EMOJIS = ['💫', '🌙', '✨', '💌', '🌌', '⭐', '🔮', '🌊'];
 
@@ -55,7 +57,6 @@ function MessageCard({ msg, onFavorite, onDelete, onReply }: {
       className="message-card"
       style={{ padding: '24px', position: 'relative', overflow: 'hidden' }}
     >
-      {/* Subtle gradient accent */}
       <div style={{
         position: 'absolute',
         top: 0,
@@ -216,6 +217,9 @@ export default function DashboardPage() {
     if (!user) return;
     setLoading(true);
 
+    // 🔧 FIXED: Ensure profile exists before fetching (fixes email sign-in + Google username)
+    const ensuredProfile = await ensureUserProfile(user);
+
     const [profileRes, msgRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
       supabase.from('messages')
@@ -228,6 +232,10 @@ export default function DashboardPage() {
     if (profileRes.data) {
       setProfile(profileRes.data);
       setBio(profileRes.data.bio || '');
+    } else if (ensuredProfile) {
+      // 🔧 FIXED: Fallback to the profile we just created
+      setProfile(ensuredProfile as Profile);
+      setBio(ensuredProfile.bio || '');
     }
     if (msgRes.data) setMessages(msgRes.data);
     setLoading(false);
@@ -261,14 +269,25 @@ export default function DashboardPage() {
     setTimeout(() => setToast(''), 3000);
   };
 
-  const profileUrl = profile ? `${window.location.origin}/u/${profile.username}` : '';
+  // 🔧 FIXED: Safe profile URL generation — won't break if profile is null or username is missing
+  const profileUrl = profile?.username
+    ? `${window.location.origin}/u/${profile.username}`
+    : '';
 
-  const copyLink = () => {
-    if (!profileUrl) return;
-    navigator.clipboard.writeText(profileUrl);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
-    showToast('Link copied to clipboard ✓');
+  const copyLink = async () => {
+    if (!profileUrl) {
+      showToast('Profile still loading...');
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(profileUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+      showToast('Link copied to clipboard ✓');
+    } catch {
+      // 🔧 FIXED: Fallback for older browsers or insecure contexts
+      showToast('Could not copy. Please copy the link manually.');
+    }
   };
 
   const handleFavorite = async (id: string, val: boolean) => {
@@ -421,12 +440,13 @@ export default function DashboardPage() {
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
             }}>
-              {profileUrl}
+              {profileUrl || 'Loading your link...'}
             </div>
             <button
               className="whisper-btn whisper-btn-primary"
               onClick={copyLink}
-              style={{ padding: '11px 20px', fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0 }}
+              disabled={!profileUrl}
+              style={{ padding: '11px 20px', fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0, opacity: profileUrl ? 1 : 0.5 }}
             >
               {copied ? '✓ Copied' : 'Copy link'}
             </button>
@@ -568,7 +588,8 @@ export default function DashboardPage() {
               <button
                 className="whisper-btn whisper-btn-primary"
                 onClick={copyLink}
-                style={{ fontSize: 14 }}
+                disabled={!profileUrl}
+                style={{ fontSize: 14, opacity: profileUrl ? 1 : 0.5 }}
               >
                 Copy my link ✦
               </button>
