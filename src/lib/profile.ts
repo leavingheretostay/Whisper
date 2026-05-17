@@ -1,41 +1,41 @@
-import { supabase } from './supabase'; // Adjust this path to match your actual supabase client location
+import { supabase } from './supabase';
 
 export async function ensureUserProfile(user: any) {
-  // Check if profile already exists
+  // Check if profile already exists — use maybeSingle() to avoid errors
   const { data: existingProfile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
 
   if (existingProfile) return existingProfile;
 
-  // Generate base username without random suffix first
+  // Generate base username from Google name or email
   const baseUsername =
     user.user_metadata?.name
       ?.toLowerCase()
       .replace(/[^a-z0-9]/g, '') ||
-    user.email.split('@')[0];
+    (user.email ? user.email.split('@')[0] : 'user');
 
-  // Check if this username already exists in profiles table
+  // Check if username is taken — use maybeSingle()
   const { data: existingUsername } = await supabase
     .from('profiles')
     .select('id')
     .eq('username', baseUsername)
-    .single();
+    .maybeSingle();
 
   // Only add random number if username is already taken
   const username = existingUsername
     ? `${baseUsername}${Math.floor(Math.random() * 9999)}`
     : baseUsername;
 
-  // Create the new profile
+  // Create new profile — use display_name to match your DashboardPage
   const { data, error } = await supabase
     .from('profiles')
     .insert({
       id: user.id,
       username,
-      full_name: user.user_metadata?.name || '',
+      display_name: user.user_metadata?.name || username,
       avatar_url: user.user_metadata?.avatar_url || ''
     })
     .select()
