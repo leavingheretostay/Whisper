@@ -5,7 +5,6 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../lib/useAuth';
 import type { Profile, Message } from '../lib/types';
 import CosmicCanvas from '../components/CosmicCanvas';
-// 🔧 FIXED: Import the profile creation function
 import { ensureUserProfile } from '../lib/profile';
 
 const EMOJIS = ['💫', '🌙', '✨', '💌', '🌌', '⭐', '🔮', '🌊'];
@@ -217,8 +216,12 @@ export default function DashboardPage() {
     if (!user) return;
     setLoading(true);
 
-    // 🔧 FIXED: Ensure profile exists before fetching (fixes email sign-in + Google username)
+    console.log('1. User found:', user.id);
+    console.log('2. Calling ensureUserProfile...');
+    
     const ensuredProfile = await ensureUserProfile(user);
+    
+    console.log('3. ensureUserProfile result:', ensuredProfile);
 
     const [profileRes, msgRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
@@ -229,11 +232,13 @@ export default function DashboardPage() {
         .order('created_at', { ascending: false }),
     ]);
 
+    console.log('4. Profile from DB:', profileRes.data);
+    console.log('5. Profile error:', profileRes.error);
+
     if (profileRes.data) {
       setProfile(profileRes.data);
       setBio(profileRes.data.bio || '');
     } else if (ensuredProfile) {
-      // 🔧 FIXED: Fallback to the profile we just created
       setProfile(ensuredProfile as Profile);
       setBio(ensuredProfile.bio || '');
     }
@@ -269,7 +274,6 @@ export default function DashboardPage() {
     setTimeout(() => setToast(''), 3000);
   };
 
-  // 🔧 FIXED: Safe profile URL generation — won't break if profile is null or username is missing
   const profileUrl = profile?.username
     ? `${window.location.origin}/u/${profile.username}`
     : '';
@@ -285,7 +289,6 @@ export default function DashboardPage() {
       setTimeout(() => setCopied(false), 2500);
       showToast('Link copied to clipboard ✓');
     } catch {
-      // 🔧 FIXED: Fallback for older browsers or insecure contexts
       showToast('Could not copy. Please copy the link manually.');
     }
   };
