@@ -100,20 +100,19 @@ const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
   }
 };
 
-// ─── Dynamic Floating Message Band ─────────────────────────────────
+// ─── Dynamic Floating Message Band (fixed TypeScript error) ─────────
 const FloatingMessageBand = () => {
-  const slots = 4; // number of possible concurrent messages
+  const slots = 4;
   const [activeMessages, setActiveMessages] = useState<(number | null)[]>(Array(slots).fill(null));
   const [keys, setKeys] = useState<number[]>(Array(slots).fill(0));
 
   useEffect(() => {
-    const timeouts: NodeJS.Timeout[] = [];
+    const timeouts: ReturnType<typeof setTimeout>[] = [];
 
     const scheduleSlot = (index: number) => {
-      const showDuration = 3000 + Math.random() * 3000; // visible for 3–6s
-      const gap = 1500 + Math.random() * 4000; // wait 1.5–5.5s before next show
+      const showDuration = 3000 + Math.random() * 3000;
+      const gap = 1500 + Math.random() * 4000;
 
-      // Show a random message
       const randomMsgIndex = Math.floor(Math.random() * SAMPLE_MESSAGES.length);
       setActiveMessages(prev => {
         const next = [...prev];
@@ -122,11 +121,10 @@ const FloatingMessageBand = () => {
       });
       setKeys(prev => {
         const next = [...prev];
-        next[index] = prev[index] + 1; // force re‑mount for exit animation
+        next[index] = prev[index] + 1;
         return next;
       });
 
-      // Hide after showDuration
       const hideTimeout = setTimeout(() => {
         setActiveMessages(prev => {
           const next = [...prev];
@@ -140,7 +138,6 @@ const FloatingMessageBand = () => {
         });
       }, showDuration);
 
-      // Schedule next cycle
       const nextTimeout = setTimeout(() => {
         scheduleSlot(index);
       }, showDuration + gap);
@@ -148,7 +145,6 @@ const FloatingMessageBand = () => {
       timeouts.push(hideTimeout, nextTimeout);
     };
 
-    // Start each slot with a random initial delay (0–2s) so they aren't synchronized
     for (let i = 0; i < slots; i++) {
       const initialDelay = Math.random() * 2000;
       const startTimeout = setTimeout(() => scheduleSlot(i), initialDelay);
@@ -161,7 +157,7 @@ const FloatingMessageBand = () => {
   return (
     <div style={{
       position: 'absolute',
-      top: 80,               // just below the navigation
+      top: 80,
       left: 0,
       right: 0,
       height: 100,
@@ -296,7 +292,6 @@ export default function LandingPage() {
         overflow: 'hidden',
         padding: '0 24px',
       }}>
-        {/* Dedicated floating message band – all messages live here */}
         <FloatingMessageBand />
 
         <motion.div
@@ -306,7 +301,6 @@ export default function LandingPage() {
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
         >
           <div style={{ textAlign: 'center', maxWidth: 680, margin: '0 auto', position: 'relative', zIndex: 5 }}>
-            {/* Badge */}
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32 }}>
               <div style={{
@@ -320,7 +314,6 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Headline */}
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.9 }}
               className="font-display" style={{
                 fontSize: 'clamp(36px, 6vw, 68px)', fontWeight: 600, lineHeight: 1.1,
@@ -331,7 +324,6 @@ export default function LandingPage() {
               Where emotions float anonymously in a digital heaven
             </motion.h1>
 
-            {/* Subheadline */}
             <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
               style={{
                 fontSize: 'clamp(16px, 2.2vw, 20px)', lineHeight: 1.6,
@@ -340,7 +332,6 @@ export default function LandingPage() {
               Receive anonymous thoughts from the people who never say them aloud.
             </motion.p>
 
-            {/* CTA */}
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
               style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/auth?mode=signup" className="whisper-btn whisper-btn-primary animate-pulse-glow"
@@ -349,7 +340,6 @@ export default function LandingPage() {
                 style={{ fontSize: 16, padding: '16px 36px' }}>Sign in</Link>
             </motion.div>
 
-            {/* Stats */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
               style={{ display: 'flex', gap: 32, justifyContent: 'center', marginTop: 52, flexWrap: 'wrap' }}>
               {[{ val: '100%', label: 'Anonymous' }, { val: 'Ad-free', label: 'Always' }, { val: '∞', label: 'Messages' }].map(s => (
@@ -362,7 +352,6 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Scroll indicator */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
           style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, zIndex: 5 }}>
           <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
