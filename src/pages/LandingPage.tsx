@@ -37,22 +37,24 @@ function FloatingMessage({ text, emoji, delay, x, y }: { text: string; emoji: st
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: [0, 0.85, 0.85, 0] }}
+      animate={{ opacity: [0, 0.7, 0.7, 0] }}
       transition={{ delay, duration: 6, repeat: Infinity, repeatDelay: 3 }}
-      style={{ position: 'absolute', left: x, top: y, maxWidth: 240, zIndex: 2 }}
+      style={{ position: 'absolute', left: x, top: y, maxWidth: 220, zIndex: 1, pointerEvents: 'none' }}
     >
-      <div className="glass" style={{
-        padding: '14px 18px',
+      <div style={{
+        padding: '12px 16px',
         borderRadius: 18,
-        fontSize: 13,
+        fontSize: 12,
         lineHeight: '1.5',
-        color: 'rgba(232, 232, 240, 0.85)',
+        color: 'rgba(232, 232, 240, 0.7)',
         display: 'flex',
-        gap: 10,
+        gap: 8,
         alignItems: 'flex-start',
-        backdropFilter: 'blur(20px)',
+        backdropFilter: 'blur(16px)',
+        background: 'rgba(10, 10, 30, 0.5)',
+        border: '1px solid rgba(255,255,255,0.06)',
       }}>
-        <span style={{ fontSize: 18, flexShrink: 0 }}>{emoji}</span>
+        <span style={{ fontSize: 16, flexShrink: 0 }}>{emoji}</span>
         <span style={{ fontStyle: 'italic' }}>{text}</span>
       </div>
     </motion.div>
@@ -76,7 +78,7 @@ export default function LandingPage() {
       <CosmicCanvas theme="cosmic" />
 
       {/* Nav */}
-      <nav className="whisper-nav">
+      <nav className="whisper-nav" style={{ zIndex: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 32, height: 32,
@@ -100,12 +102,12 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <div ref={heroRef} style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+      <div ref={heroRef} style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
         {/* Floating preview messages */}
-        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0.5} x="5%" y="25%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={2} x="68%" y="20%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={4} x="72%" y="65%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={1} x="2%" y="65%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0.5} x="3%" y="20%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={2} x="60%" y="15%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={4} x="62%" y="60%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={1} x="2%" y="62%" />
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
@@ -128,7 +130,7 @@ export default function LandingPage() {
               transition={{ delay: 0.2 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32 }}
             >
-              <div className="glass" style={{
+              <div style={{
                 padding: '6px 16px',
                 borderRadius: 100,
                 fontSize: 12,
@@ -136,6 +138,9 @@ export default function LandingPage() {
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 fontWeight: 600,
+                backdropFilter: 'blur(20px)',
+                background: 'rgba(255,255,255,0.04)',
+                border: '1px solid rgba(255,255,255,0.08)',
               }}>
                 ✦ Anonymous. Honest. Beautiful.
               </div>
@@ -200,26 +205,35 @@ export default function LandingPage() {
                 Sign in
               </Link>
             </motion.div>
-
-            {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-              style={{ display: 'flex', gap: 32, justifyContent: 'center', marginTop: 52, flexWrap: 'wrap' }}
-            >
-              {[
-                { val: '100%', label: 'Anonymous' },
-                { val: 'Ad-free', label: 'Always' },
-                { val: '∞', label: 'Messages' },
-              ].map(s => (
-                <div key={s.label} style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 22, fontWeight: 700, color: '#a78bfa' }}>{s.val}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(200,200,220,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{s.label}</div>
-                </div>
-              ))}
-            </motion.div>
           </div>
+        </motion.div>
+
+        {/* 🔧 FIXED: Stats moved OUTSIDE the fading hero div so they don't get cut */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          style={{
+            display: 'flex',
+            gap: 32,
+            justifyContent: 'center',
+            marginTop: 52,
+            flexWrap: 'wrap',
+            position: 'relative',
+            zIndex: 3,
+            padding: '0 24px',
+          }}
+        >
+          {[
+            { val: '100%', label: 'Anonymous' },
+            { val: 'Ad-free', label: 'Always' },
+            { val: '∞', label: 'Messages' },
+          ].map(s => (
+            <div key={s.label} style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 22, fontWeight: 700, color: '#a78bfa' }}>{s.val}</div>
+              <div style={{ fontSize: 12, color: 'rgba(200,200,220,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{s.label}</div>
+            </div>
+          ))}
         </motion.div>
 
         {/* Scroll indicator */}
@@ -404,7 +418,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
-          ✦ Whisper — Where thoughts travel anonymously. Made with intention.
+          ✦ Whisper — Where thoughts travel anonymously. Made with intention by Nasir Lone.
         </p>
       </footer>
     </div>
