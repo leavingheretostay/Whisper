@@ -18,7 +18,7 @@ const STEPS = [
   { number: "03", title: "Receive the unspoken", desc: "Messages arrive anonymously. Words people have been holding for years." },
 ];
 
-// ─── CSS 3D Icons (no emojis, pure code) ────────────────────────────
+// ─── 3D Icons (pure CSS, no emojis) ────────────────────────────────
 const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
   const s = size;
   const half = s / 2;
@@ -100,7 +100,43 @@ const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
   }
 };
 
-// ─── Stacked Message Card Carousel ──────────────────────────────────
+// ─── Floating Message (used in hero empty spaces) ──────────────────
+function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: string; delay: number; x: string; y: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: [0, 0.7, 0.7, 0] }}
+      transition={{ delay, duration: 6, repeat: Infinity, repeatDelay: 3 }}
+      style={{
+        position: 'absolute',
+        left: x,
+        top: y,
+        maxWidth: 180,
+        zIndex: 2,
+        pointerEvents: 'none',
+      }}
+    >
+      <div style={{
+        padding: '10px 14px',
+        borderRadius: 16,
+        fontSize: 11,
+        lineHeight: 1.4,
+        color: 'rgba(232, 232, 240, 0.8)',
+        display: 'flex',
+        gap: 8,
+        alignItems: 'center',
+        backdropFilter: 'blur(14px)',
+        background: 'rgba(15, 15, 40, 0.6)',
+        border: '1px solid rgba(255,255,255,0.08)',
+      }}>
+        <Icon3D type={icon} size={24} />
+        <span style={{ fontStyle: 'italic' }}>{text}</span>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Stacked Card Carousel (below hero) ───────────────────────────
 function MessageStack({ messages }: { messages: typeof SAMPLE_MESSAGES }) {
   const [index, setIndex] = useState(0);
 
@@ -174,7 +210,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero – no floating messages, only the stack will be in the next section */}
+      {/* Hero – with floating messages only in empty areas */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -185,6 +221,12 @@ export default function LandingPage() {
         overflow: 'hidden',
         padding: '0 24px',
       }}>
+        {/* Floating messages in blank spaces */}
+        <FloatingMessage icon="sparkle" text="You're seen." delay={0} x="4%" y="12%" />
+        <FloatingMessage icon="moon" text="Changed me." delay={1.5} x="78%" y="15%" />
+        <FloatingMessage icon="star" text="Best sound." delay={3} x="6%" y="55%" />
+        <FloatingMessage icon="galaxy" text="Still thinking." delay={4.5} x="80%" y="62%" />
+
         <motion.div
           style={{ opacity: heroOpacity }}
           initial={{ opacity: 0, y: 30 }}
@@ -257,7 +299,7 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* ─── NEW: Stacked Messages Section ───────────────────────────── */}
+      {/* Stacked messages section (unchanged) */}
       <section style={{ padding: '60px 24px 80px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
@@ -272,7 +314,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works – with 3D icons */}
+      {/* How it works */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -296,7 +338,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features – with 3D icons */}
+      {/* Features */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
