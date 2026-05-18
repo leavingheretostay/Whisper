@@ -23,6 +23,8 @@ export default function CosmicCanvas({ theme = 'cosmic' }: CosmicCanvasProps) {
       speedY: number;
       opacity: number;
       hue: number;
+      pulseSpeed: number;
+      pulseOffset: number;
     }> = [];
 
     const resize = () => {
@@ -31,7 +33,7 @@ export default function CosmicCanvas({ theme = 'cosmic' }: CosmicCanvasProps) {
     };
 
     const createParticles = () => {
-      const count = Math.min(40, Math.floor((canvas.width * canvas.height) / 20000));
+      const count = Math.min(60, Math.floor((canvas.width * canvas.height) / 12000));
       particles = [];
 
       const themes = {
@@ -47,22 +49,25 @@ export default function CosmicCanvas({ theme = 'cosmic' }: CosmicCanvasProps) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 1.5 + 0.3,
-          speedX: (Math.random() - 0.5) * 0.08,
-          speedY: (Math.random() - 0.5) * 0.08,
-          opacity: 0.08 + Math.random() * 0.12,
+          size: Math.random() * 2 + 0.4,
+          speedX: (Math.random() - 0.5) * 0.12,
+          speedY: (Math.random() - 0.5) * 0.12,
+          opacity: 0.1 + Math.random() * 0.2,
           hue: config.hueMin + Math.random() * (config.hueMax - config.hueMin),
+          pulseSpeed: 0.002 + Math.random() * 0.006,
+          pulseOffset: Math.random() * Math.PI * 2,
         });
       }
     };
 
-    const animate = () => {
-      // Solid dark background - NO gradient flash
+    const animate = (time: number) => {
       ctx.fillStyle = '#060614';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Subtle particles only
       for (const p of particles) {
+        const pulse = Math.sin(time * p.pulseSpeed + p.pulseOffset) * 0.4 + 0.6;
+        const currentOpacity = p.opacity * pulse;
+
         p.x += p.speedX;
         p.y += p.speedY;
 
@@ -73,7 +78,17 @@ export default function CosmicCanvas({ theme = 'cosmic' }: CosmicCanvasProps) {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue}, 60%, 70%, ${p.opacity})`;
+
+        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 3);
+        glow.addColorStop(0, `hsla(${p.hue}, 70%, 70%, ${currentOpacity})`);
+        glow.addColorStop(0.5, `hsla(${p.hue}, 70%, 70%, ${currentOpacity * 0.2})`);
+        glow.addColorStop(1, 'transparent');
+        ctx.fillStyle = glow;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size * 0.5, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${p.hue}, 80%, 85%, ${currentOpacity * 1.2})`;
         ctx.fill();
       }
 
@@ -82,7 +97,7 @@ export default function CosmicCanvas({ theme = 'cosmic' }: CosmicCanvasProps) {
 
     resize();
     createParticles();
-    animate();
+    animate(0);
 
     window.addEventListener('resize', () => {
       resize();
