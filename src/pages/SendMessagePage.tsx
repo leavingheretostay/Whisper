@@ -69,8 +69,7 @@ export default function SendMessagePage() {
     const { error: insertError } = await supabase.from('messages').insert({
       recipient_id: profile.id,
       content: message.trim(),
-      emoji_reaction: selectedEmoji,
-      is_flagged: false,
+      emoji_reaction: selectedEmoji || null,
     });
 
     if (insertError) {
