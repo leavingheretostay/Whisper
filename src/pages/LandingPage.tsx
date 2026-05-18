@@ -13,58 +13,63 @@ const SAMPLE_MESSAGES = [
 ];
 
 const STEPS = [
-  {
-    number: "01",
-    title: "Create your profile",
-    desc: "Sign up in seconds. Choose a username that becomes your portal into the unknown.",
-    icon: "👤",
-  },
-  {
-    number: "02",
-    title: "Share your link",
-    desc: "Post your link anywhere. Instagram, X, WhatsApp — wherever your world lives.",
-    icon: "🔗",
-  },
-  {
-    number: "03",
-    title: "Receive the unspoken",
-    desc: "Messages arrive anonymously. Words people have been holding for years.",
-    icon: "💬",
-  },
+  { number: "01", title: "Create your profile", desc: "Sign up in seconds. Choose a username that becomes your portal into the unknown.", icon: "👤" },
+  { number: "02", title: "Share your link", desc: "Post your link anywhere. Instagram, X, WhatsApp — wherever your world lives.", icon: "🔗" },
+  { number: "03", title: "Receive the unspoken", desc: "Messages arrive anonymously. Words people have been holding for years.", icon: "💬" },
 ];
 
 function FloatingMessage({ text, emoji, delay, x, y }: { text: string; emoji: string; delay: number; x: string; y: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: [0, 0.8, 0.8, 0] }}
-      transition={{ delay, duration: 5, repeat: Infinity, repeatDelay: 2 }}
+      animate={{ opacity: [0, 0.75, 0.75, 0] }}
+      transition={{ delay, duration: 6, repeat: Infinity, repeatDelay: 3 }}
       style={{
         position: 'absolute',
         left: x,
         top: y,
-        maxWidth: 200,
-        zIndex: 1,
+        maxWidth: 220,
+        zIndex: 3,
         pointerEvents: 'none',
       }}
     >
       <div style={{
-        padding: '10px 14px',
-        borderRadius: 16,
-        fontSize: 11,
-        lineHeight: '1.5',
-        color: 'rgba(232, 232, 240, 0.75)',
+        padding: '12px 16px',
+        borderRadius: 18,
+        fontSize: 12,
+        lineHeight: 1.5,
+        color: 'rgba(232, 232, 240, 0.8)',
         display: 'flex',
-        gap: 6,
+        gap: 8,
         alignItems: 'flex-start',
-        backdropFilter: 'blur(12px)',
-        background: 'rgba(15, 15, 40, 0.55)',
-        border: '1px solid rgba(255,255,255,0.06)',
+        backdropFilter: 'blur(16px)',
+        background: 'rgba(18, 18, 50, 0.6)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
       }}>
-        <span style={{ fontSize: 14, flexShrink: 0 }}>{emoji}</span>
+        <span style={{ fontSize: 16, flexShrink: 0 }}>{emoji}</span>
         <span style={{ fontStyle: 'italic' }}>{text}</span>
       </div>
     </motion.div>
+  );
+}
+
+function StarIcon() {
+  return (
+    <span style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 28,
+      height: 28,
+      borderRadius: '50%',
+      background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)',
+      boxShadow: '0 0 16px rgba(79,142,247,0.5), 0 0 32px rgba(167,139,250,0.3)',
+      fontSize: 14,
+      color: '#fff',
+      fontWeight: 700,
+      fontFamily: 'Inter, sans-serif',
+    }}>✦</span>
   );
 }
 
@@ -80,12 +85,12 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="page-wrapper" style={{ background: '#060614', position: 'relative' }}>
+    <div style={{ position: 'relative', background: '#060614', minHeight: '100vh', overflow: 'hidden' }}>
       <CosmicCanvas theme="cosmic" />
 
       {/* Nav */}
       <nav className="whisper-nav">
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
           <div style={{
             width: 32, height: 32,
             background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)',
@@ -96,7 +101,7 @@ export default function LandingPage() {
           <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 600, letterSpacing: '0.02em' }}>
             Whisper
           </span>
-        </div>
+        </Link>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <Link to="/auth" className="whisper-btn whisper-btn-ghost" style={{ padding: '9px 20px', fontSize: 14 }}>
             Sign in
@@ -107,37 +112,24 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ===== FLOATING MESSAGES SECTION – fixed, isolated, nothing touches it ===== */}
-      <div style={{
-        position: 'fixed',
-        top: 80,
-        left: 0,
-        right: 0,
-        height: 130,
-        zIndex: 1,
-        pointerEvents: 'none',
-        overflow: 'hidden',
-      }}>
-        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="8%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="20%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="52%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="65%" />
-      </div>
-
-      {/* ===== HERO – all content pushed well below the floating messages ===== */}
+      {/* Hero */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingTop: '250px',
-        overflow: 'visible',
+        justifyContent: 'center',
+        overflow: 'hidden',
       }}>
-        {/* Badge + Headline + CTA – fades on scroll, no movement */}
+        {/* Floating messages – scroll naturally with the page */}
+        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="15%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="62%" y="22%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="60%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="64%" y="68%" />
+
         <motion.div
-          style={{ opacity: heroOpacity, zIndex: 5, position: 'relative' }}
+          style={{ opacity: heroOpacity }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
@@ -147,6 +139,8 @@ export default function LandingPage() {
             maxWidth: 680,
             margin: '0 auto',
             padding: '0 24px',
+            position: 'relative',
+            zIndex: 5,
           }}>
             {/* Badge */}
             <motion.div
@@ -171,7 +165,7 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Headline */}
+            {/* Main headline */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -208,7 +202,7 @@ export default function LandingPage() {
               Receive anonymous thoughts from the people who never say them aloud.
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* CTA */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -230,6 +224,31 @@ export default function LandingPage() {
                 Sign in
               </Link>
             </motion.div>
+
+            {/* Stats */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              style={{
+                display: 'flex',
+                gap: 32,
+                justifyContent: 'center',
+                marginTop: 52,
+                flexWrap: 'wrap',
+              }}
+            >
+              {[
+                { val: '100%', label: 'Anonymous' },
+                { val: 'Ad-free', label: 'Always' },
+                { val: '∞', label: 'Messages' },
+              ].map(s => (
+                <div key={s.label} style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 22, fontWeight: 700, color: '#a78bfa' }}>{s.val}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(200,200,220,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{s.label}</div>
+                </div>
+              ))}
+            </motion.div>
           </div>
         </motion.div>
 
@@ -239,11 +258,14 @@ export default function LandingPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
           style={{
+            position: 'absolute',
+            bottom: 32,
+            left: '50%',
+            transform: 'translateX(-50%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: 6,
-            marginTop: 20,
             zIndex: 5,
           }}
         >
@@ -254,67 +276,11 @@ export default function LandingPage() {
             style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }}
           />
         </motion.div>
-
-        {/* Comet line */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.8 }}
-          style={{
-            width: 120,
-            height: 2,
-            margin: '24px auto 0',
-            position: 'relative',
-            background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.6), transparent)',
-            zIndex: 5,
-          }}
-        >
-          <motion.div
-            animate={{ left: ['0%', '100%'] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-            style={{
-              position: 'absolute',
-              top: -4,
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: '#a78bfa',
-              boxShadow: '0 0 10px #a78bfa, 0 0 20px #a78bfa',
-            }}
-          />
-        </motion.div>
-
-        {/* Stats */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          style={{
-            display: 'flex',
-            gap: 40,
-            justifyContent: 'center',
-            marginTop: 60,
-            flexWrap: 'wrap',
-            position: 'relative',
-            zIndex: 5,
-            padding: '0 24px',
-          }}
-        >
-          {[
-            { val: '100%', label: 'Anonymous' },
-            { val: 'Ad-free', label: 'Always' },
-            { val: '∞', label: 'Messages' },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: 22, fontWeight: 700, color: '#a78bfa' }}>{s.val}</div>
-              <div style={{ fontSize: 12, color: 'rgba(200,200,220,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{s.label}</div>
-            </div>
-          ))}
-        </motion.div>
       </div>
 
-      {/* ===== LOWER SECTIONS – untouched, original design ===== */}
+      {/* ===== LOWER SECTIONS – original design, untouched ===== */}
 
+      {/* Live message preview */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div
@@ -361,6 +327,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* How it works */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div
@@ -386,7 +353,20 @@ export default function LandingPage() {
                 className="glass"
                 style={{ padding: '32px 28px', borderRadius: 24, textAlign: 'center' }}
               >
-                <div style={{ fontSize: 40, marginBottom: 16 }}>{step.icon}</div>
+                <div style={{
+                  fontSize: 36,
+                  marginBottom: 16,
+                  width: 56,
+                  height: 56,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, rgba(79,142,247,0.2), rgba(167,139,250,0.2))',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid rgba(167,139,250,0.3)',
+                }}>
+                  {step.icon}
+                </div>
                 <div style={{ fontSize: 11, color: 'rgba(167,139,250,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12, fontWeight: 600 }}>
                   Step {step.number}
                 </div>
@@ -398,6 +378,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Features */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div
@@ -428,7 +409,20 @@ export default function LandingPage() {
                 className="glass"
                 style={{ padding: '24px 20px', borderRadius: 20, textAlign: 'center' }}
               >
-                <div style={{ fontSize: 28, marginBottom: 10 }}>{f.icon}</div>
+                <div style={{
+                  fontSize: 26,
+                  marginBottom: 10,
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  background: 'linear-gradient(135deg, rgba(79,142,247,0.15), rgba(167,139,250,0.15))',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '1px solid rgba(167,139,250,0.2)',
+                }}>
+                  {f.icon}
+                </div>
                 <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: '#e8e8f0' }}>{f.title}</div>
                 <div style={{ fontSize: 12, color: 'rgba(200,200,220,0.5)', lineHeight: 1.5 }}>{f.desc}</div>
               </motion.div>
@@ -437,6 +431,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Final CTA */}
       <section style={{ padding: '100px 24px 120px', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -464,6 +459,7 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
+      {/* Footer */}
       <footer style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
           ✦ Whisper — Where thoughts travel anonymously. Made with intention.
