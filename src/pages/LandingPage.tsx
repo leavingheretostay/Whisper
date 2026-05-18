@@ -444,7 +444,7 @@ export default function LandingPage() {
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center', justifyContent: 'center' }}>
           {/* Instagram */}
           <a
-            href="https://instagram.com/lonenacir"
+            href="https://www.instagram.com/lonenacir/"
             target="_blank"
             rel="noopener noreferrer"
             title="Instagram"
