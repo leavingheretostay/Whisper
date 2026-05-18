@@ -85,7 +85,7 @@ export default function LandingPage() {
       <CosmicCanvas theme="cosmic" />
 
       {/* Nav */}
-      <nav className="whisper-nav" style={{ zIndex: 20, position: 'relative' }}>
+      <nav className="whisper-nav">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 32, height: 32,
@@ -108,6 +108,23 @@ export default function LandingPage() {
         </div>
       </nav>
 
+      {/* Dedicated Floating Messages Section */}
+      <div style={{
+        position: 'absolute',
+        top: '80px',
+        left: 0,
+        right: 0,
+        height: '120px',
+        zIndex: 2,
+        pointerEvents: 'none',
+        overflow: 'hidden',
+      }}>
+        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="5%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="52%" y="15%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="55%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="54%" y="60%" />
+      </div>
+
       {/* Hero */}
       <div ref={heroRef} style={{
         position: 'relative',
@@ -117,24 +134,7 @@ export default function LandingPage() {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        paddingTop: '20px',
       }}>
-        {/* 🔧 FIXED: Floating messages positioned BETWEEN nav and badge */}
-        <div style={{
-          position: 'absolute',
-          top: '60px',
-          left: 0,
-          right: 0,
-          height: '100px',
-          zIndex: 1,
-          pointerEvents: 'none',
-        }}>
-          <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="5%" y="10%" />
-          <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="25%" />
-          <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="3%" y="50%" />
-          <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="58%" y="55%" />
-        </div>
-
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
           initial={{ opacity: 0, y: 30 }}
@@ -234,7 +234,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* 🔧 FIXED: Stats below CTA with enough margin to not overlap */}
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
