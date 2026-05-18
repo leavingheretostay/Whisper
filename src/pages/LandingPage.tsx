@@ -4,12 +4,15 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import CosmicCanvas from '../components/CosmicCanvas';
 
 const SAMPLE_MESSAGES = [
-  { text: "You have this rare way of making people feel completely seen.", icon: "sparkle" },
-  { text: "I've never told you this, but you changed my life.", icon: "moon" },
-  { text: "Your laugh is the best sound in any room.", icon: "star" },
-  { text: "I think about our conversation from three years ago still.", icon: "galaxy" },
-  { text: "You're braver than you know.", icon: "heart" },
-  { text: "Sometimes I write letters to you that I never send.", icon: "envelope" },
+  { text: "MY ATOMS LOVE YOUR ATOMS, IT’S CHEMISTRY.", icon: "sparkle" },
+  { text: "Chase your stars fool, life is short.", icon: "star" },
+  { text: "IT’S A LONELY THING, PROTECTING A BREAKABLE HEART.", icon: "heart" },
+  { text: "New love is the best cure for old love gone bad.", icon: "moon" },
+  { text: "In all you do, absolutely everything, may love be the core, may love be the essence.", icon: "galaxy" },
+  { text: "Simply touching you is poetry enough.", icon: "envelope" },
+  { text: "Don't believe everything you know for sure.", icon: "sparkle" },
+  { text: "I'm tired of their stories lets write our own you are braver than you know.", icon: "star" },
+  { text: "Sometimes I write letters to you that I never send.", icon: "moon" },
 ];
 
 const STEPS = [
@@ -138,7 +141,7 @@ function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: stri
 
 // ─── Scattered Floating Messages (desktop only) ──────────────────
 const DesktopFloatingMessages = () => {
-  // 14 messages with varied positions and delays
+  // 9 distinct messages with varied positions and delays
   const messages = [
     { ...SAMPLE_MESSAGES[0], delay: 0, x: '2%', y: '12%' },
     { ...SAMPLE_MESSAGES[1], delay: 1.2, x: '75%', y: '10%' },
@@ -146,14 +149,9 @@ const DesktopFloatingMessages = () => {
     { ...SAMPLE_MESSAGES[3], delay: 3.7, x: '78%', y: '40%' },
     { ...SAMPLE_MESSAGES[4], delay: 5, x: '8%', y: '72%' },
     { ...SAMPLE_MESSAGES[5], delay: 6.2, x: '80%', y: '70%' },
-    { ...SAMPLE_MESSAGES[0], delay: 1.8, x: '30%', y: '15%' },
-    { ...SAMPLE_MESSAGES[1], delay: 3, x: '60%', y: '18%' },
-    { ...SAMPLE_MESSAGES[2], delay: 4.3, x: '15%', y: '55%' },
-    { ...SAMPLE_MESSAGES[3], delay: 5.5, x: '70%', y: '55%' },
-    { ...SAMPLE_MESSAGES[4], delay: 0.8, x: '22%', y: '78%' },
-    { ...SAMPLE_MESSAGES[5], delay: 2, x: '65%', y: '75%' },
-    { ...SAMPLE_MESSAGES[0], delay: 3.5, x: '85%', y: '25%' },
-    { ...SAMPLE_MESSAGES[1], delay: 4.8, x: '10%', y: '28%' },
+    { ...SAMPLE_MESSAGES[6], delay: 1.8, x: '30%', y: '15%' },
+    { ...SAMPLE_MESSAGES[7], delay: 3, x: '60%', y: '18%' },
+    { ...SAMPLE_MESSAGES[8], delay: 4.3, x: '15%', y: '55%' },
   ];
 
   return (
@@ -317,38 +315,26 @@ export default function LandingPage() {
                 </div>
               ))}
             </motion.div>
-          </div>
-        </motion.div>
 
-        {/* Scroll indicator and comet line – more spacing */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-          style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, zIndex: 5 }}>
-          <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
-          <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity }}
-            style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }} />
-          {/* Comet line */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.8 }}
-            style={{
-              width: 120, height: 2, margin: '12px auto 0',
-              position: 'relative',
-              background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.6), transparent)',
-            }}
-          >
-            <motion.div
-              animate={{ left: ['0%', '100%'] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            {/* Scroll indicator – moved below stats, no comet line */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
               style={{
-                position: 'absolute',
-                top: -4, width: 8, height: 8,
-                borderRadius: '50%',
-                background: '#a78bfa',
-                boxShadow: '0 0 10px #a78bfa, 0 0 20px #a78bfa',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 6,
+                marginTop: 40,
+                zIndex: 5,
               }}
-            />
-          </motion.div>
+            >
+              <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
+              <motion.div
+                animate={{ y: [0, 6, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }}
+              />
+            </motion.div>
+          </div>
         </motion.div>
       </div>
 
