@@ -107,7 +107,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Floating messages – moved up, right below the nav */}
+      {/* Floating messages – closer to nav, dedicated area */}
       <div style={{
         position: 'absolute',
         top: 80,
@@ -124,7 +124,7 @@ export default function LandingPage() {
         <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="68%" />
       </div>
 
-      {/* Hero – content starts well below the floating messages */}
+      {/* Hero */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -132,10 +132,9 @@ export default function LandingPage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: '210px',  // gives space between floating messages and badge
+        paddingTop: '210px',
         overflow: 'visible',
       }}>
-        {/* Badge, headline, CTA – original spacing between badge and headline preserved */}
         <motion.div
           style={{ opacity: heroOpacity, zIndex: 5, position: 'relative' }}
           initial={{ opacity: 0, y: 30 }}
@@ -171,7 +170,7 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Main headline */}
+            {/* Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -233,7 +232,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Scroll indicator – placed right after the CTA with matching spacing */}
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -243,7 +242,7 @@ export default function LandingPage() {
             flexDirection: 'column',
             alignItems: 'center',
             gap: 6,
-            marginTop: '20px',   // same approximate spacing as between the two CTA buttons
+            marginTop: '20px',
             zIndex: 5,
           }}
         >
@@ -255,7 +254,7 @@ export default function LandingPage() {
           />
         </motion.div>
 
-        {/* Glowing star/comet line – new decorative element */}
+        {/* Comet line */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -285,7 +284,7 @@ export default function LandingPage() {
           />
         </motion.div>
 
-        {/* Stats – exactly where they were before, now after the comet line */}
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -314,7 +313,9 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* Live message preview – unchanged */}
+      {/* ===== LOWER SECTION – ORIGINAL STYLING, NO CHANGES ===== */}
+
+      {/* Live message preview */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div
