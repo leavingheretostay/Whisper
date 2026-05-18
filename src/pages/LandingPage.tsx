@@ -108,21 +108,21 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Dedicated Floating Messages Section – completely isolated */}
+      {/* Dedicated Floating Messages Section */}
       <div style={{
         position: 'absolute',
-        top: 90, // well below the nav
+        top: 90,
         left: 0,
         right: 0,
-        height: 110,
+        height: 150,
         zIndex: 2,
         pointerEvents: 'none',
-        overflow: 'hidden',
+        overflow: 'visible',
       }}>
-        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="10%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="15%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="55%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="65%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="8%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="18%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="50%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="68%" />
       </div>
 
       {/* Hero */}
@@ -132,9 +132,9 @@ export default function LandingPage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'flex-start', // push content higher so badge is well above messages
-        paddingTop: 'calc(50vh - 260px)', // roughly center the content block visually
-        overflow: 'visible', // changed from hidden to avoid cutting off
+        justifyContent: 'flex-start',
+        paddingTop: '260px',
+        overflow: 'visible',
       }}>
         <motion.div
           style={{ y: heroY, opacity: heroOpacity, zIndex: 5, position: 'relative' }}
@@ -233,7 +233,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Stats – placed far below the CTA, never overlaps */}
+        {/* Stats */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -242,7 +242,7 @@ export default function LandingPage() {
             display: 'flex',
             gap: 40,
             justifyContent: 'center',
-            marginTop: 100, // plenty of breathing room
+            marginTop: 100,
             flexWrap: 'wrap',
             position: 'relative',
             zIndex: 5,
@@ -261,7 +261,7 @@ export default function LandingPage() {
           ))}
         </motion.div>
 
-        {/* Scroll indicator – kept at bottom */}
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
