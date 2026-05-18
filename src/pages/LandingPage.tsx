@@ -100,41 +100,116 @@ const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
   }
 };
 
-// ─── Floating Message (used in hero empty spaces) ──────────────────
-function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: string; delay: number; x: string; y: string }) {
+// ─── Dynamic Floating Message Band ─────────────────────────────────
+const FloatingMessageBand = () => {
+  const slots = 4; // number of possible concurrent messages
+  const [activeMessages, setActiveMessages] = useState<(number | null)[]>(Array(slots).fill(null));
+  const [keys, setKeys] = useState<number[]>(Array(slots).fill(0));
+
+  useEffect(() => {
+    const timeouts: NodeJS.Timeout[] = [];
+
+    const scheduleSlot = (index: number) => {
+      const showDuration = 3000 + Math.random() * 3000; // visible for 3–6s
+      const gap = 1500 + Math.random() * 4000; // wait 1.5–5.5s before next show
+
+      // Show a random message
+      const randomMsgIndex = Math.floor(Math.random() * SAMPLE_MESSAGES.length);
+      setActiveMessages(prev => {
+        const next = [...prev];
+        next[index] = randomMsgIndex;
+        return next;
+      });
+      setKeys(prev => {
+        const next = [...prev];
+        next[index] = prev[index] + 1; // force re‑mount for exit animation
+        return next;
+      });
+
+      // Hide after showDuration
+      const hideTimeout = setTimeout(() => {
+        setActiveMessages(prev => {
+          const next = [...prev];
+          next[index] = null;
+          return next;
+        });
+        setKeys(prev => {
+          const next = [...prev];
+          next[index] = prev[index] + 1;
+          return next;
+        });
+      }, showDuration);
+
+      // Schedule next cycle
+      const nextTimeout = setTimeout(() => {
+        scheduleSlot(index);
+      }, showDuration + gap);
+
+      timeouts.push(hideTimeout, nextTimeout);
+    };
+
+    // Start each slot with a random initial delay (0–2s) so they aren't synchronized
+    for (let i = 0; i < slots; i++) {
+      const initialDelay = Math.random() * 2000;
+      const startTimeout = setTimeout(() => scheduleSlot(i), initialDelay);
+      timeouts.push(startTimeout);
+    }
+
+    return () => timeouts.forEach(clearTimeout);
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: [0, 0.7, 0.7, 0] }}
-      transition={{ delay, duration: 6, repeat: Infinity, repeatDelay: 3 }}
-      style={{
-        position: 'absolute',
-        left: x,
-        top: y,
-        maxWidth: 180,
-        zIndex: 2,
-        pointerEvents: 'none',
-      }}
-    >
-      <div style={{
-        padding: '10px 14px',
-        borderRadius: 16,
-        fontSize: 11,
-        lineHeight: 1.4,
-        color: 'rgba(232, 232, 240, 0.8)',
-        display: 'flex',
-        gap: 8,
-        alignItems: 'center',
-        backdropFilter: 'blur(14px)',
-        background: 'rgba(15, 15, 40, 0.6)',
-        border: '1px solid rgba(255,255,255,0.08)',
-      }}>
-        <Icon3D type={icon} size={24} />
-        <span style={{ fontStyle: 'italic' }}>{text}</span>
-      </div>
-    </motion.div>
+    <div style={{
+      position: 'absolute',
+      top: 80,               // just below the navigation
+      left: 0,
+      right: 0,
+      height: 100,
+      zIndex: 2,
+      pointerEvents: 'none',
+      display: 'flex',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      padding: '0 10px',
+    }}>
+      {Array.from({ length: slots }).map((_, i) => (
+        <div key={i} style={{ position: 'relative', flex: 1, display: 'flex', justifyContent: 'center' }}>
+          <AnimatePresence mode="wait">
+            {activeMessages[i] !== null && (
+              <motion.div
+                key={keys[i]}
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ opacity: 0.75, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+                style={{
+                  padding: '8px 14px',
+                  borderRadius: 14,
+                  fontSize: 11,
+                  lineHeight: 1.3,
+                  color: 'rgba(232, 232, 240, 0.85)',
+                  display: 'flex',
+                  gap: 8,
+                  alignItems: 'center',
+                  backdropFilter: 'blur(12px)',
+                  background: 'rgba(20, 20, 60, 0.65)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  whiteSpace: 'nowrap',
+                  position: 'absolute',
+                }}
+              >
+                <Icon3D type={SAMPLE_MESSAGES[activeMessages[i]!].icon} size={22} />
+                <span style={{ fontStyle: 'italic' }}>
+                  {SAMPLE_MESSAGES[activeMessages[i]!].text.split('.')[0] + '.'}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ))}
+    </div>
   );
-}
+};
 
 // ─── Stacked Card Carousel (below hero) ───────────────────────────
 function MessageStack({ messages }: { messages: typeof SAMPLE_MESSAGES }) {
@@ -210,7 +285,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero – with floating messages only in empty areas */}
+      {/* Hero – with dynamic floating message band only */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -221,11 +296,8 @@ export default function LandingPage() {
         overflow: 'hidden',
         padding: '0 24px',
       }}>
-        {/* Floating messages in blank spaces */}
-        <FloatingMessage icon="sparkle" text="You're seen." delay={0} x="4%" y="12%" />
-        <FloatingMessage icon="moon" text="Changed me." delay={1.5} x="78%" y="15%" />
-        <FloatingMessage icon="star" text="Best sound." delay={3} x="6%" y="55%" />
-        <FloatingMessage icon="galaxy" text="Still thinking." delay={4.5} x="80%" y="62%" />
+        {/* Dedicated floating message band – all messages live here */}
+        <FloatingMessageBand />
 
         <motion.div
           style={{ opacity: heroOpacity }}
@@ -299,7 +371,7 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* Stacked messages section (unchanged) */}
+      {/* Stacked messages section */}
       <section style={{ padding: '60px 24px 80px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
