@@ -81,7 +81,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="page-wrapper" style={{ background: '#060614' }}>
+    <div className="page-wrapper" style={{ background: '#060614', position: 'relative' }}>
       <CosmicCanvas theme="cosmic" />
 
       {/* Nav */}
@@ -108,21 +108,21 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Dedicated Floating Messages Section */}
+      {/* Dedicated Floating Messages Section – completely isolated */}
       <div style={{
         position: 'absolute',
-        top: '80px',
+        top: 90, // well below the nav
         left: 0,
         right: 0,
-        height: '120px',
+        height: 110,
         zIndex: 2,
         pointerEvents: 'none',
         overflow: 'hidden',
       }}>
-        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="5%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="52%" y="15%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="10%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="15%" />
         <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="55%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="54%" y="60%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="65%" />
       </div>
 
       {/* Hero */}
@@ -132,11 +132,12 @@ export default function LandingPage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'hidden',
+        justifyContent: 'flex-start', // push content higher so badge is well above messages
+        paddingTop: 'calc(50vh - 260px)', // roughly center the content block visually
+        overflow: 'visible', // changed from hidden to avoid cutting off
       }}>
         <motion.div
-          style={{ y: heroY, opacity: heroOpacity }}
+          style={{ y: heroY, opacity: heroOpacity, zIndex: 5, position: 'relative' }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
@@ -146,8 +147,6 @@ export default function LandingPage() {
             maxWidth: 680,
             margin: '0 auto',
             padding: '0 24px',
-            position: 'relative',
-            zIndex: 5,
           }}>
             {/* Badge */}
             <motion.div
@@ -234,16 +233,16 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Stats */}
+        {/* Stats – placed far below the CTA, never overlaps */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
           style={{
             display: 'flex',
-            gap: 32,
+            gap: 40,
             justifyContent: 'center',
-            marginTop: 60,
+            marginTop: 100, // plenty of breathing room
             flexWrap: 'wrap',
             position: 'relative',
             zIndex: 5,
@@ -262,7 +261,7 @@ export default function LandingPage() {
           ))}
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator – kept at bottom */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
