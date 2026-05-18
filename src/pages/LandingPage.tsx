@@ -71,7 +71,7 @@ function FloatingMessage({ text, emoji, delay, x, y }: { text: string; emoji: st
 export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef });
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  // Removed parallax movement – hero content stays fixed to prevent overlap
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const [msgIndex, setMsgIndex] = useState(0);
 
@@ -125,7 +125,7 @@ export default function LandingPage() {
         <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="68%" />
       </div>
 
-      {/* Hero */}
+      {/* Hero – no parallax movement */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -133,11 +133,11 @@ export default function LandingPage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: '260px',
+        paddingTop: '280px',  // extra space to avoid message zone
         overflow: 'visible',
       }}>
         <motion.div
-          style={{ y: heroY, opacity: heroOpacity, zIndex: 5, position: 'relative' }}
+          style={{ opacity: heroOpacity, zIndex: 5, position: 'relative' }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
