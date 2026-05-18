@@ -107,14 +107,14 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Floating messages – closer to nav, dedicated area */}
+      {/* Floating messages – fixed so they never scroll away or get cut off */}
       <div style={{
-        position: 'absolute',
+        position: 'fixed',
         top: 80,
         left: 0,
         right: 0,
         height: 110,
-        zIndex: 2,
+        zIndex: 1,
         pointerEvents: 'none',
         overflow: 'visible',
       }}>
@@ -124,7 +124,7 @@ export default function LandingPage() {
         <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="68%" />
       </div>
 
-      {/* Hero */}
+      {/* Hero – all content starts below the fixed message area */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -132,7 +132,7 @@ export default function LandingPage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: '210px',
+        paddingTop: '220px',   // clears the fixed messages (80+110)
         overflow: 'visible',
       }}>
         <motion.div
@@ -232,7 +232,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator – just below the CTA */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -242,7 +242,7 @@ export default function LandingPage() {
             flexDirection: 'column',
             alignItems: 'center',
             gap: 6,
-            marginTop: '20px',
+            marginTop: 20,
             zIndex: 5,
           }}
         >
@@ -260,8 +260,8 @@ export default function LandingPage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8 }}
           style={{
-            width: '120px',
-            height: '2px',
+            width: 120,
+            height: 2,
             margin: '24px auto 0',
             position: 'relative',
             background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.6), transparent)',
@@ -273,10 +273,9 @@ export default function LandingPage() {
             transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
             style={{
               position: 'absolute',
-              top: '-4px',
-              left: 0,
-              width: '8px',
-              height: '8px',
+              top: -4,
+              width: 8,
+              height: 8,
               borderRadius: '50%',
               background: '#a78bfa',
               boxShadow: '0 0 10px #a78bfa, 0 0 20px #a78bfa',
@@ -313,7 +312,7 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* ===== LOWER SECTION – ORIGINAL STYLING, NO CHANGES ===== */}
+      {/* ===== LOWER SECTION – ORIGINAL STYLING ===== */}
 
       {/* Live message preview */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
