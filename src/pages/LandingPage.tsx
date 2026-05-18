@@ -429,7 +429,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
-          ✦ Whisper — Where thoughts travel anonymously. Made with intention.
+          ✦ Whisper — Where thoughts travel anonymously. Made with ❤️ by Nasir Lone.
         </p>
       </footer>
     </div>
