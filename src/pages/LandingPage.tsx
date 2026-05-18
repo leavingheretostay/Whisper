@@ -445,7 +445,7 @@ export default function LandingPage() {
     {/* Instagram */}
     {/* Instagram */}
 <a
-  href="https://instagram.com/lonenacir"
+  href="https://instagram.com/nacirlone"
   target="_blank"
   rel="noopener noreferrer"
   title="Instagram"
