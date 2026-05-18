@@ -119,20 +119,20 @@ export default function LandingPage() {
         overflow: 'hidden',
         paddingTop: '20px',
       }}>
-        {/* 🔧 FIXED: Floating messages positioned BETWEEN nav and badge */}
+        {/* 🔧 FIXED: Floating messages with wider spacing and better positioning */}
         <div style={{
           position: 'absolute',
-          top: '60px',
+          top: '100px',
           left: 0,
           right: 0,
-          height: '100px',
+          height: '350px',
           zIndex: 1,
           pointerEvents: 'none',
         }}>
-          <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="5%" y="10%" />
-          <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="25%" />
-          <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="3%" y="50%" />
-          <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="58%" y="55%" />
+          <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="8%" y="0px" />
+          <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="58%" y="100px" />
+          <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="5%" y="200px" />
+          <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="60%" y="280px" />
         </div>
 
         <motion.div
@@ -234,7 +234,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* 🔧 FIXED: Stats below CTA with enough margin to not overlap */}
+        {/* 🔧 FIXED: Stats section with increased top margin to prevent overlap */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -243,7 +243,7 @@ export default function LandingPage() {
             display: 'flex',
             gap: 32,
             justifyContent: 'center',
-            marginTop: 60,
+            marginTop: 120,
             flexWrap: 'wrap',
             position: 'relative',
             zIndex: 5,
