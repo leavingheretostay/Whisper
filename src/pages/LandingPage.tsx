@@ -18,7 +18,7 @@ const STEPS = [
   { number: "03", title: "Receive the unspoken", desc: "Messages arrive anonymously. Words people have been holding for years." },
 ];
 
-// ─── CSS 3D Icons (no emojis, pure code) ────────────────────────────
+// ─── 3D Icons (pure CSS, no emojis) ────────────────────────────────
 const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
   const s = size;
   const half = s / 2;
@@ -100,7 +100,77 @@ const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
   }
 };
 
-// ─── Stacked Message Card Carousel ──────────────────────────────────
+// ─── Floating Message (used in hero) ──────────────────────────────
+function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: string; delay: number; x: string; y: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: [0, 0.7, 0.7, 0] }}
+      transition={{ delay, duration: 6, repeat: Infinity, repeatDelay: 3 }}
+      style={{
+        position: 'absolute',
+        left: x,
+        top: y,
+        maxWidth: 180,
+        zIndex: 2,
+        pointerEvents: 'none',
+      }}
+    >
+      <div style={{
+        padding: '10px 14px',
+        borderRadius: 16,
+        fontSize: 11,
+        lineHeight: 1.4,
+        color: 'rgba(232, 232, 240, 0.8)',
+        display: 'flex',
+        gap: 8,
+        alignItems: 'center',
+        backdropFilter: 'blur(14px)',
+        background: 'rgba(15, 15, 40, 0.6)',
+        border: '1px solid rgba(255,255,255,0.08)',
+      }}>
+        <Icon3D type={icon} size={24} />
+        <span style={{ fontStyle: 'italic' }}>{text}</span>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Scattered Floating Messages (desktop only) ──────────────────
+const DesktopFloatingMessages = () => {
+  // 14 messages with varied positions and delays
+  const messages = [
+    { ...SAMPLE_MESSAGES[0], delay: 0, x: '2%', y: '12%' },
+    { ...SAMPLE_MESSAGES[1], delay: 1.2, x: '75%', y: '10%' },
+    { ...SAMPLE_MESSAGES[2], delay: 2.5, x: '5%', y: '45%' },
+    { ...SAMPLE_MESSAGES[3], delay: 3.7, x: '78%', y: '40%' },
+    { ...SAMPLE_MESSAGES[4], delay: 5, x: '8%', y: '72%' },
+    { ...SAMPLE_MESSAGES[5], delay: 6.2, x: '80%', y: '70%' },
+    { ...SAMPLE_MESSAGES[0], delay: 1.8, x: '30%', y: '15%' },
+    { ...SAMPLE_MESSAGES[1], delay: 3, x: '60%', y: '18%' },
+    { ...SAMPLE_MESSAGES[2], delay: 4.3, x: '15%', y: '55%' },
+    { ...SAMPLE_MESSAGES[3], delay: 5.5, x: '70%', y: '55%' },
+    { ...SAMPLE_MESSAGES[4], delay: 0.8, x: '22%', y: '78%' },
+    { ...SAMPLE_MESSAGES[5], delay: 2, x: '65%', y: '75%' },
+    { ...SAMPLE_MESSAGES[0], delay: 3.5, x: '85%', y: '25%' },
+    { ...SAMPLE_MESSAGES[1], delay: 4.8, x: '10%', y: '28%' },
+  ];
+
+  return (
+    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', display: 'none' }} className="desktop-floating">
+      {messages.map((msg, i) => (
+        <FloatingMessage key={i} text={msg.text} icon={msg.icon} delay={msg.delay} x={msg.x} y={msg.y} />
+      ))}
+      <style>{`
+        @media (min-width: 768px) {
+          .desktop-floating { display: block !important; }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+// ─── Stacked Card Carousel (below hero) ───────────────────────────
 function MessageStack({ messages }: { messages: typeof SAMPLE_MESSAGES }) {
   const [index, setIndex] = useState(0);
 
@@ -174,7 +244,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero – no floating messages, only the stack will be in the next section */}
+      {/* Hero – with desktop floating messages */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -185,6 +255,8 @@ export default function LandingPage() {
         overflow: 'hidden',
         padding: '0 24px',
       }}>
+        <DesktopFloatingMessages />
+
         <motion.div
           style={{ opacity: heroOpacity }}
           initial={{ opacity: 0, y: 30 }}
@@ -248,16 +320,39 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator and comet line – more spacing */}
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, zIndex: 5 }}>
+          style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, zIndex: 5 }}>
           <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
           <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity }}
             style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }} />
+          {/* Comet line */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.8 }}
+            style={{
+              width: 120, height: 2, margin: '12px auto 0',
+              position: 'relative',
+              background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.6), transparent)',
+            }}
+          >
+            <motion.div
+              animate={{ left: ['0%', '100%'] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+              style={{
+                position: 'absolute',
+                top: -4, width: 8, height: 8,
+                borderRadius: '50%',
+                background: '#a78bfa',
+                boxShadow: '0 0 10px #a78bfa, 0 0 20px #a78bfa',
+              }}
+            />
+          </motion.div>
         </motion.div>
       </div>
 
-      {/* ─── NEW: Stacked Messages Section ───────────────────────────── */}
+      {/* Stacked messages section */}
       <section style={{ padding: '60px 24px 80px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
@@ -272,7 +367,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works – with 3D icons */}
+      {/* How it works */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -296,7 +391,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features – with 3D icons */}
+      {/* Features */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
@@ -348,7 +443,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
-          ✦ Whisper — Where thoughts travel anonymously. Made with ❤️ by Nasir Lone.
+          ✦ Whisper — Where thoughts travel anonymously. Made with intention.
         </p>
       </footer>
     </div>
