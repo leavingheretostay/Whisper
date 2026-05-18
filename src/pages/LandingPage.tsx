@@ -426,83 +426,83 @@ export default function LandingPage() {
       </section>
 
       {/* Footer with icons */}
-      <footer style={{
-        padding: '24px 32px',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
-        position: 'relative',
-        zIndex: 3,
-        textAlign: 'center',
-        display: 'flex',
-        flexDirection: 'column',
+     <footer style={{
+  padding: '24px 32px',
+  borderTop: '1px solid rgba(255,255,255,0.05)',
+  position: 'relative',
+  zIndex: 3,
+  textAlign: 'center',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  gap: '16px',
+}}>
+  <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
+    ✦ Whisper — Where thoughts travel anonymously. Made with ❤️ by Nasir Lone.
+  </p>
+
+  <div style={{ display: 'flex', gap: '24px', alignItems: 'center', justifyContent: 'center' }}>
+    {/* Instagram */}
+    <a
+      href="https://www.instagram.com/lonenacir/"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Instagram"
+      style={{
+        color: 'rgba(200,200,220,0.35)',
+        transition: 'color 0.2s ease, transform 0.2s ease',
+        display: 'inline-flex',
         alignItems: 'center',
-        gap: '16px',
-      }}>
-        <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
-          ✦ Whisper — Where thoughts travel anonymously. Made with ❤️ by Nasir Lone.
-        </p>
+        justifyContent: 'center',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.color = '#e1306c'; e.currentTarget.style.transform = 'scale(1.15)'; }}
+      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,200,220,0.35)'; e.currentTarget.style.transform = 'scale(1)'; }}
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+      </svg>
+    </a>
 
-        <div style={{ display: 'flex', gap: '24px', alignItems: 'center', justifyContent: 'center' }}>
-          {/* Instagram */}
-          <a
-            href="https://www.instagram.com/lonenacir/"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Instagram"
-            style={{
-              color: 'rgba(200,200,220,0.35)',
-              transition: 'color 0.2s ease, transform 0.2s ease',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#e1306c'; e.currentTarget.style.transform = 'scale(1.15)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,200,220,0.35)'; e.currentTarget.style.transform = 'scale(1)'; }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-            </svg>
-          </a>
+    {/* Donate via UPI */}
+    <a
+      href="upi://pay?pa=lonenasir724@okaxis&pn=Whisper&cu=INR"
+      title="Donate via UPI"
+      style={{
+        color: 'rgba(200,200,220,0.35)',
+        transition: 'color 0.2s ease, transform 0.2s ease',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.color = '#34d399'; e.currentTarget.style.transform = 'scale(1.15)'; }}
+      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,200,220,0.35)'; e.currentTarget.style.transform = 'scale(1)'; }}
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
+      </svg>
+    </a>
 
-          {/* Donate via UPI */}
-          <a
-            href="upi://pay?pa=lonenasir724@okaxis&pn=Whisper&cu=INR"
-            title="Donate via UPI"
-            style={{
-              color: 'rgba(200,200,220,0.35)',
-              transition: 'color 0.2s ease, transform 0.2s ease',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#34d399'; e.currentTarget.style.transform = 'scale(1.15)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,200,220,0.35)'; e.currentTarget.style.transform = 'scale(1)'; }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1.41 16.09V20h-2.67v-1.93c-1.71-.36-3.16-1.46-3.27-3.4h1.96c.1 1.05.82 1.87 2.65 1.87 1.96 0 2.4-.98 2.4-1.59 0-.83-.44-1.61-2.67-2.14-2.48-.6-4.18-1.62-4.18-3.67 0-1.72 1.39-2.84 3.11-3.21V4h2.67v1.95c1.86.45 2.79 1.86 2.85 3.39H14.3c-.05-1.11-.64-1.87-2.22-1.87-1.5 0-2.4.68-2.4 1.64 0 .84.65 1.39 2.67 1.91s4.18 1.39 4.18 3.91c-.01 1.83-1.38 2.83-3.12 3.16z"/>
-            </svg>
-          </a>
-
-          {/* Email for bugs */}
-          <a
-            href="mailto:lonenasir724@gmail.com?subject=Whisper%20Bug%20Report"
-            title="Report a bug"
-            style={{
-              color: 'rgba(200,200,220,0.35)',
-              transition: 'color 0.2s ease, transform 0.2s ease',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.transform = 'scale(1.15)'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,200,220,0.35)'; e.currentTarget.style.transform = 'scale(1)'; }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-              <polyline points="22,6 12,13 2,6"/>
-            </svg>
-          </a>
-        </div>
-      </footer>
+    {/* Email for bugs */}
+    <a
+      href="mailto:lonenasir724@gmail.com?subject=Whisper%20Bug%20Report"
+      title="Report a bug"
+      style={{
+        color: 'rgba(200,200,220,0.35)',
+        transition: 'color 0.2s ease, transform 0.2s ease',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.transform = 'scale(1.15)'; }}
+      onMouseLeave={e => { e.currentTarget.style.color = 'rgba(200,200,220,0.35)'; e.currentTarget.style.transform = 'scale(1)'; }}
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </a>
+  </div>
+</footer> 
     </div>
   );
 }
