@@ -107,24 +107,24 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Floating messages – fixed so they never scroll away or get cut off */}
+      {/* ===== FLOATING MESSAGES SECTION – fixed, isolated, nothing touches it ===== */}
       <div style={{
         position: 'fixed',
         top: 80,
         left: 0,
         right: 0,
-        height: 110,
+        height: 130,
         zIndex: 1,
         pointerEvents: 'none',
-        overflow: 'visible',
+        overflow: 'hidden',
       }}>
         <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="8%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="18%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="50%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="68%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="20%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="52%" />
+        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="65%" />
       </div>
 
-      {/* Hero – all content starts below the fixed message area */}
+      {/* ===== HERO – all content pushed well below the floating messages ===== */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -132,9 +132,10 @@ export default function LandingPage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: '220px',   // clears the fixed messages (80+110)
+        paddingTop: '250px',
         overflow: 'visible',
       }}>
+        {/* Badge + Headline + CTA – fades on scroll, no movement */}
         <motion.div
           style={{ opacity: heroOpacity, zIndex: 5, position: 'relative' }}
           initial={{ opacity: 0, y: 30 }}
@@ -207,7 +208,7 @@ export default function LandingPage() {
               Receive anonymous thoughts from the people who never say them aloud.
             </motion.p>
 
-            {/* CTA */}
+            {/* CTA Buttons */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -232,7 +233,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Scroll indicator – just below the CTA */}
+        {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -312,9 +313,8 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* ===== LOWER SECTION – ORIGINAL STYLING ===== */}
+      {/* ===== LOWER SECTIONS – untouched, original design ===== */}
 
-      {/* Live message preview */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div
@@ -361,7 +361,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div
@@ -399,7 +398,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div
@@ -439,7 +437,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section style={{ padding: '100px 24px 120px', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -467,7 +464,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Footer */}
       <footer style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
           ✦ Whisper — Where thoughts travel anonymously. Made with intention.
