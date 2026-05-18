@@ -71,7 +71,6 @@ function FloatingMessage({ text, emoji, delay, x, y }: { text: string; emoji: st
 export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef });
-  // Removed parallax movement – hero content stays fixed to prevent overlap
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const [msgIndex, setMsgIndex] = useState(0);
 
@@ -133,11 +132,11 @@ export default function LandingPage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: '280px',  // extra space to avoid message zone
+        paddingTop: '240px', // slightly tighter to bring scroll indicator into view
         overflow: 'visible',
       }}>
         <motion.div
-          style={{ opacity: heroOpacity, zIndex: 5, position: 'relative' }}
+          style={{ opacity: heroOpacity, zIndex: 5, position: 'relative', marginTop: '20px' }} // badge a little lower
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
@@ -261,20 +260,17 @@ export default function LandingPage() {
           ))}
         </motion.div>
 
-        {/* Scroll indicator */}
+        {/* Scroll indicator – now in flow, just below stats */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5 }}
           style={{
-            position: 'absolute',
-            bottom: 32,
-            left: '50%',
-            transform: 'translateX(-50%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: 6,
+            marginTop: '40px',
             zIndex: 5,
           }}
         >
@@ -443,7 +439,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
-          ✦ Whisper — Where thoughts travel anonymously. Made with ❤️ by Nasir Lone.
+          ✦ Whisper — Where thoughts travel anonymously. Made with intention.
         </p>
       </footer>
     </div>
