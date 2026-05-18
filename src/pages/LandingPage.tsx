@@ -36,25 +36,32 @@ const STEPS = [
 function FloatingMessage({ text, emoji, delay, x, y }: { text: string; emoji: string; delay: number; x: string; y: string }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: [0, 0.7, 0.7, 0] }}
-      transition={{ delay, duration: 6, repeat: Infinity, repeatDelay: 3 }}
-      style={{ position: 'absolute', left: x, top: y, maxWidth: 220, zIndex: 1, pointerEvents: 'none' }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: [0, 0.8, 0.8, 0] }}
+      transition={{ delay, duration: 5, repeat: Infinity, repeatDelay: 2 }}
+      style={{
+        position: 'absolute',
+        left: x,
+        top: y,
+        maxWidth: 200,
+        zIndex: 1,
+        pointerEvents: 'none',
+      }}
     >
       <div style={{
-        padding: '12px 16px',
-        borderRadius: 18,
-        fontSize: 12,
+        padding: '10px 14px',
+        borderRadius: 16,
+        fontSize: 11,
         lineHeight: '1.5',
-        color: 'rgba(232, 232, 240, 0.7)',
+        color: 'rgba(232, 232, 240, 0.75)',
         display: 'flex',
-        gap: 8,
+        gap: 6,
         alignItems: 'flex-start',
-        backdropFilter: 'blur(16px)',
-        background: 'rgba(10, 10, 30, 0.5)',
+        backdropFilter: 'blur(12px)',
+        background: 'rgba(15, 15, 40, 0.55)',
         border: '1px solid rgba(255,255,255,0.06)',
       }}>
-        <span style={{ fontSize: 16, flexShrink: 0 }}>{emoji}</span>
+        <span style={{ fontSize: 14, flexShrink: 0 }}>{emoji}</span>
         <span style={{ fontStyle: 'italic' }}>{text}</span>
       </div>
     </motion.div>
@@ -64,8 +71,8 @@ function FloatingMessage({ text, emoji, delay, x, y }: { text: string; emoji: st
 export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef });
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const [msgIndex, setMsgIndex] = useState(0);
 
   useEffect(() => {
@@ -78,7 +85,7 @@ export default function LandingPage() {
       <CosmicCanvas theme="cosmic" />
 
       {/* Nav */}
-      <nav className="whisper-nav" style={{ zIndex: 10 }}>
+      <nav className="whisper-nav" style={{ zIndex: 20, position: 'relative' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
             width: 32, height: 32,
@@ -102,12 +109,31 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero */}
-      <div ref={heroRef} style={{ position: 'relative', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-        {/* Floating preview messages */}
-        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0.5} x="3%" y="20%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={2} x="60%" y="15%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={4} x="62%" y="60%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={1} x="2%" y="62%" />
+      <div ref={heroRef} style={{
+        position: 'relative',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        paddingTop: '20px',
+      }}>
+        {/* 🔧 FIXED: Floating messages positioned BETWEEN nav and badge */}
+        <div style={{
+          position: 'absolute',
+          top: '60px',
+          left: 0,
+          right: 0,
+          height: '100px',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}>
+          <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="5%" y="10%" />
+          <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="55%" y="25%" />
+          <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="3%" y="50%" />
+          <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="58%" y="55%" />
+        </div>
 
         <motion.div
           style={{ y: heroY, opacity: heroOpacity }}
@@ -121,7 +147,7 @@ export default function LandingPage() {
             margin: '0 auto',
             padding: '0 24px',
             position: 'relative',
-            zIndex: 3,
+            zIndex: 5,
           }}>
             {/* Badge */}
             <motion.div
@@ -208,7 +234,7 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* 🔧 FIXED: Stats moved OUTSIDE the fading hero div so they don't get cut */}
+        {/* 🔧 FIXED: Stats below CTA with enough margin to not overlap */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -217,10 +243,10 @@ export default function LandingPage() {
             display: 'flex',
             gap: 32,
             justifyContent: 'center',
-            marginTop: 52,
+            marginTop: 60,
             flexWrap: 'wrap',
             position: 'relative',
-            zIndex: 3,
+            zIndex: 5,
             padding: '0 24px',
           }}
         >
@@ -250,7 +276,7 @@ export default function LandingPage() {
             flexDirection: 'column',
             alignItems: 'center',
             gap: 6,
-            zIndex: 3,
+            zIndex: 5,
           }}
         >
           <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
@@ -418,7 +444,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer style={{ padding: '24px 32px', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <p style={{ fontSize: 13, color: 'rgba(200,200,220,0.3)', margin: 0 }}>
-          ✦ Whisper — Where thoughts travel anonymously. Made with intention by Nasir Lone.
+          ✦ Whisper — Where thoughts travel anonymously. Made with ❤️ by Nasir Lone.
         </p>
       </footer>
     </div>
