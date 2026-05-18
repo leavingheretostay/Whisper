@@ -26,6 +26,18 @@ export default function AuthPage() {
     setMode(params.get('mode') === 'signup' ? 'signup' : 'login');
   }, [params]);
 
+  // Auto-check if user is already logged in (after clicking email confirmation link)
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data.session?.user) {
+        await ensureUserProfile(data.session.user);
+        navigate('/dashboard');
+      }
+    };
+    checkSession();
+  }, [navigate]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -53,30 +65,45 @@ export default function AuthPage() {
           return;
         }
 
-        const { data, error: signUpError } = await supabase.auth.signUp({ email, password });
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              username: username.toLowerCase(),
+              display_name: displayName || username,
+            }
+          }
+        });
+
         if (signUpError) throw signUpError;
 
         if (data.user) {
-          // Create profile
+          // Create profile immediately
           const { error: profileError } = await supabase.from('profiles').insert({
             id: data.user.id,
             username: username.toLowerCase(),
             display_name: displayName || username,
           });
-          if (profileError) throw profileError;
+          if (profileError) {
+            console.error('Profile creation error:', profileError);
+          }
         }
 
         // Show confirmation screen
         setShowConfirmation(true);
+        setLoading(false);
+        return;
       } else {
         const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-        
+
         if (signInError) {
-          // Check if error is about email not confirmed
           if (signInError.message.includes('Email not confirmed')) {
-            setError('Please check your email and click the confirmation link first.');
+            setError('Please check your email and click the confirmation link first. Then come back and sign in.');
+          } else if (signInError.message.includes('Invalid login credentials')) {
+            setError('Invalid email or password. Please try again.');
           } else {
-            throw signInError;
+            setError(signInError.message);
           }
           setLoading(false);
           return;
@@ -84,14 +111,12 @@ export default function AuthPage() {
 
         if (data.user) {
           await ensureUserProfile(data.user);
+          navigate('/dashboard');
         }
-
-        navigate('/dashboard');
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
       setError(msg);
-    } finally {
       setLoading(false);
     }
   };
@@ -108,7 +133,6 @@ export default function AuthPage() {
   const handleGoToLogin = () => {
     setShowConfirmation(false);
     setMode('login');
-    setSuccess('');
     setError('');
   };
 
@@ -136,22 +160,25 @@ export default function AuthPage() {
         >
           <div className="glass-strong" style={{ padding: '40px 36px', borderRadius: 28, textAlign: 'center' }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>📧</div>
-            <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 12 }}>Check your email</h2>
+            <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 12 }}>Verify your email</h2>
             <p style={{ color: 'rgba(200,200,220,0.6)', fontSize: 14, marginBottom: 8 }}>
               We sent a confirmation link to:
             </p>
             <p style={{ color: '#a78bfa', fontSize: 15, fontWeight: 500, marginBottom: 20, wordBreak: 'break-all' }}>
               {email}
             </p>
+            <p style={{ color: 'rgba(200,200,220,0.4)', fontSize: 13, marginBottom: 8 }}>
+              Click the link in the email to verify your account.
+            </p>
             <p style={{ color: 'rgba(200,200,220,0.4)', fontSize: 13, marginBottom: 24 }}>
-              Click the link in the email to verify your account, then sign in.
+              After verification, you'll be logged in automatically.
             </p>
             <button
               className="whisper-btn whisper-btn-primary"
               onClick={handleGoToLogin}
               style={{ width: '100%', padding: '12px' }}
             >
-              Go to Sign in
+              I've verified — Sign in
             </button>
           </div>
         </motion.div>
@@ -189,7 +216,7 @@ export default function AuthPage() {
             {(['login', 'signup'] as const).map(m => (
               <button
                 key={m}
-                onClick={() => setMode(m)}
+                onClick={() => { setMode(m); setError(''); }}
                 style={{
                   flex: 1,
                   padding: '10px',
@@ -299,23 +326,6 @@ export default function AuthPage() {
                     }}
                   >
                     {error}
-                  </motion.div>
-                )}
-
-                {success && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    style={{
-                      padding: '12px 16px',
-                      borderRadius: 12,
-                      background: 'rgba(52, 211, 153, 0.12)',
-                      border: '1px solid rgba(52, 211, 153, 0.3)',
-                      color: '#6ee7b7',
-                      fontSize: 13,
-                    }}
-                  >
-                    {success}
                   </motion.div>
                 )}
 
