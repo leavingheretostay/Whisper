@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../lib/supabase';
-// 🔧 FIXED: Import the profile creation function
 import { ensureUserProfile } from '../lib/profile';
 import CosmicCanvas from '../components/CosmicCanvas';
 
@@ -21,6 +20,7 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   useEffect(() => {
     setMode(params.get('mode') === 'signup' ? 'signup' : 'login');
@@ -57,20 +57,31 @@ export default function AuthPage() {
         if (signUpError) throw signUpError;
 
         if (data.user) {
+          // Create profile
           const { error: profileError } = await supabase.from('profiles').insert({
             id: data.user.id,
             username: username.toLowerCase(),
             display_name: displayName || username,
           });
           if (profileError) throw profileError;
-          navigate('/dashboard');
         }
-      } else {
-        // 🔧 FIXED: Login — sign in, then ensure profile exists before redirecting
-        const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-        if (signInError) throw signInError;
 
-        // Create profile if it doesn't exist (handles Google users logging in with email)
+        // Show confirmation screen
+        setShowConfirmation(true);
+      } else {
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        
+        if (signInError) {
+          // Check if error is about email not confirmed
+          if (signInError.message.includes('Email not confirmed')) {
+            setError('Please check your email and click the confirmation link first.');
+          } else {
+            throw signInError;
+          }
+          setLoading(false);
+          return;
+        }
+
         if (data.user) {
           await ensureUserProfile(data.user);
         }
@@ -85,21 +96,68 @@ export default function AuthPage() {
     }
   };
 
-  // 🔧 FIXED: Google sign-in now creates profile before redirecting
   const handleGoogle = async () => {
     setError('');
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo: `${window.location.origin}/dashboard` },
     });
-    if (error) {
-      setError(error.message);
-      return;
-    }
-    // Note: OAuth redirects away, so we can't create the profile here.
-    // The profile will be created in DashboardPage's loadData() via ensureUserProfile().
-    // This is handled by the fix already in DashboardPage.tsx.
+    if (error) setError(error.message);
   };
+
+  const handleGoToLogin = () => {
+    setShowConfirmation(false);
+    setMode('login');
+    setSuccess('');
+    setError('');
+  };
+
+  // Show confirmation screen after signup
+  if (showConfirmation) {
+    return (
+      <div className="page-wrapper" style={{ background: '#060614', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CosmicCanvas theme="cosmic" />
+        <nav className="whisper-nav">
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
+            <div style={{
+              width: 32, height: 32,
+              background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)',
+              borderRadius: 10,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 16,
+            }}>✦</div>
+            <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 600 }}>Whisper</span>
+          </Link>
+        </nav>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{ width: '100%', maxWidth: 440, margin: '0 auto', padding: '0 20px', position: 'relative', zIndex: 3 }}
+        >
+          <div className="glass-strong" style={{ padding: '40px 36px', borderRadius: 28, textAlign: 'center' }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>📧</div>
+            <h2 style={{ fontSize: 22, fontWeight: 600, marginBottom: 12 }}>Check your email</h2>
+            <p style={{ color: 'rgba(200,200,220,0.6)', fontSize: 14, marginBottom: 8 }}>
+              We sent a confirmation link to:
+            </p>
+            <p style={{ color: '#a78bfa', fontSize: 15, fontWeight: 500, marginBottom: 20, wordBreak: 'break-all' }}>
+              {email}
+            </p>
+            <p style={{ color: 'rgba(200,200,220,0.4)', fontSize: 13, marginBottom: 24 }}>
+              Click the link in the email to verify your account, then sign in.
+            </p>
+            <button
+              className="whisper-btn whisper-btn-primary"
+              onClick={handleGoToLogin}
+              style={{ width: '100%', padding: '12px' }}
+            >
+              Go to Sign in
+            </button>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-wrapper" style={{ background: '#060614', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -182,9 +240,6 @@ export default function AuthPage() {
                         required
                         autoFocus
                       />
-                      <p style={{ fontSize: 11, color: 'rgba(200,200,220,0.35)', marginTop: 4 }}>
-                        whisper.app/{username || 'yourname'}
-                      </p>
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: 'rgba(200,200,220,0.55)', display: 'block', marginBottom: 6, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
