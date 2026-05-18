@@ -4,72 +4,140 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import CosmicCanvas from '../components/CosmicCanvas';
 
 const SAMPLE_MESSAGES = [
-  { text: "You have this rare way of making people feel completely seen.", emoji: "✨" },
-  { text: "I've never told you this, but you changed my life.", emoji: "🌙" },
-  { text: "Your laugh is the best sound in any room.", emoji: "💫" },
-  { text: "I think about our conversation from three years ago still.", emoji: "🌌" },
-  { text: "You're braver than you know.", emoji: "⭐" },
-  { text: "Sometimes I write letters to you that I never send.", emoji: "💌" },
+  { text: "You have this rare way of making people feel completely seen.", icon: "sparkle" },
+  { text: "I've never told you this, but you changed my life.", icon: "moon" },
+  { text: "Your laugh is the best sound in any room.", icon: "star" },
+  { text: "I think about our conversation from three years ago still.", icon: "galaxy" },
+  { text: "You're braver than you know.", icon: "heart" },
+  { text: "Sometimes I write letters to you that I never send.", icon: "envelope" },
 ];
 
 const STEPS = [
-  { number: "01", title: "Create your profile", desc: "Sign up in seconds. Choose a username that becomes your portal into the unknown.", icon: "👤" },
-  { number: "02", title: "Share your link", desc: "Post your link anywhere. Instagram, X, WhatsApp — wherever your world lives.", icon: "🔗" },
-  { number: "03", title: "Receive the unspoken", desc: "Messages arrive anonymously. Words people have been holding for years.", icon: "💬" },
+  { number: "01", title: "Create your profile", desc: "Sign up in seconds. Choose a username that becomes your portal into the unknown." },
+  { number: "02", title: "Share your link", desc: "Post your link anywhere. Instagram, X, WhatsApp — wherever your world lives." },
+  { number: "03", title: "Receive the unspoken", desc: "Messages arrive anonymously. Words people have been holding for years." },
 ];
 
-function FloatingMessage({ text, emoji, delay, x, y }: { text: string; emoji: string; delay: number; x: string; y: string }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: [0, 0.75, 0.75, 0] }}
-      transition={{ delay, duration: 6, repeat: Infinity, repeatDelay: 3 }}
-      style={{
-        position: 'absolute',
-        left: x,
-        top: y,
-        maxWidth: 220,
-        zIndex: 3,
-        pointerEvents: 'none',
-      }}
-    >
-      <div style={{
-        padding: '12px 16px',
-        borderRadius: 18,
-        fontSize: 12,
-        lineHeight: 1.5,
-        color: 'rgba(232, 232, 240, 0.8)',
-        display: 'flex',
-        gap: 8,
-        alignItems: 'flex-start',
-        backdropFilter: 'blur(16px)',
-        background: 'rgba(18, 18, 50, 0.6)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-      }}>
-        <span style={{ fontSize: 16, flexShrink: 0 }}>{emoji}</span>
-        <span style={{ fontStyle: 'italic' }}>{text}</span>
-      </div>
-    </motion.div>
-  );
-}
+// ─── CSS 3D Icons (no emojis, pure code) ────────────────────────────
+const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
+  const s = size;
+  const half = s / 2;
+  const common: React.CSSProperties = {
+    width: s, height: s, position: 'relative', display: 'inline-flex',
+    alignItems: 'center', justifyContent: 'center',
+  };
 
-function StarIcon() {
+  switch (type) {
+    case 'sparkle':
+      return (
+        <div style={common}>
+          <div style={{
+            width: '60%', height: '60%', background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+            borderRadius: '30%', transform: 'rotate(45deg)',
+            boxShadow: '0 0 20px rgba(251,191,36,0.6), 0 0 40px rgba(245,158,11,0.3)',
+          }} />
+        </div>
+      );
+    case 'moon':
+      return (
+        <div style={common}>
+          <div style={{
+            width: '65%', height: '65%', borderRadius: '50%',
+            background: 'linear-gradient(135deg, #e5e7eb, #9ca3af)',
+            boxShadow: '0 0 25px rgba(229,231,235,0.5), inset 0 0 10px rgba(0,0,0,0.2)',
+          }} />
+        </div>
+      );
+    case 'star':
+      return (
+        <div style={common}>
+          <div style={{
+            width: 0, height: 0, borderLeft: `${half*0.3}px solid transparent`,
+            borderRight: `${half*0.3}px solid transparent`,
+            borderBottom: `${half*0.6}px solid #a78bfa`,
+            filter: 'drop-shadow(0 0 8px #a78bfa)',
+          }} />
+        </div>
+      );
+    case 'galaxy':
+      return (
+        <div style={common}>
+          <div style={{
+            width: '65%', height: '65%', borderRadius: '50%',
+            background: 'radial-gradient(circle at 30% 30%, #4f8ef7, #1e1b4b)',
+            boxShadow: '0 0 30px rgba(79,142,247,0.6)',
+          }} />
+        </div>
+      );
+    case 'heart':
+      return (
+        <div style={{ ...common, transform: 'rotate(-45deg)' }}>
+          <div style={{
+            width: '50%', height: '50%', background: 'linear-gradient(135deg, #f87171, #dc2626)',
+            borderRadius: '0 0 0 10px',
+            boxShadow: '0 0 20px rgba(248,113,113,0.6)',
+          }} />
+        </div>
+      );
+    case 'envelope':
+      return (
+        <div style={common}>
+          <div style={{
+            width: '70%', height: '50%', background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
+            borderRadius: '4px', boxShadow: '0 0 15px rgba(96,165,250,0.5)',
+            position: 'relative',
+          }}>
+            <div style={{
+              position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)',
+              width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
+              borderBottom: '10px solid #3b82f6',
+            }} />
+          </div>
+        </div>
+      );
+    default:
+      return <div style={{ ...common, background: '#333', borderRadius: '50%' }} />;
+  }
+};
+
+// ─── Stacked Message Card Carousel ──────────────────────────────────
+function MessageStack({ messages }: { messages: typeof SAMPLE_MESSAGES }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setIndex(i => (i + 1) % messages.length), 4000);
+    return () => clearInterval(t);
+  }, [messages.length]);
+
   return (
-    <span style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 28,
-      height: 28,
-      borderRadius: '50%',
-      background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)',
-      boxShadow: '0 0 16px rgba(79,142,247,0.5), 0 0 32px rgba(167,139,250,0.3)',
-      fontSize: 14,
-      color: '#fff',
-      fontWeight: 700,
-      fontFamily: 'Inter, sans-serif',
-    }}>✦</span>
+    <div style={{ position: 'relative', height: 180, maxWidth: 500, margin: '0 auto' }}>
+      <AnimatePresence mode="popLayout">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, y: 40, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: -40, scale: 0.95 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            position: 'absolute', width: '100%',
+            padding: '24px 28px', borderRadius: 24,
+            background: 'rgba(255,255,255,0.05)',
+            backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(255,255,255,0.1)',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(167,139,250,0.2) inset',
+            display: 'flex', alignItems: 'center', gap: 20,
+          }}
+        >
+          <Icon3D type={messages[index].icon} size={44} />
+          <p style={{
+            margin: 0, fontStyle: 'italic', fontSize: 'clamp(14px, 2vw, 17px)',
+            lineHeight: 1.5, color: 'rgba(232,232,240,0.9)',
+          }}>
+            "{messages[index].text}"
+          </p>
+        </motion.div>
+      </AnimatePresence>
+    </div>
   );
 }
 
@@ -77,12 +145,6 @@ export default function LandingPage() {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef });
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const [msgIndex, setMsgIndex] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setMsgIndex(i => (i + 1) % SAMPLE_MESSAGES.length), 4000);
-    return () => clearInterval(t);
-  }, []);
 
   return (
     <div style={{ position: 'relative', background: '#060614', minHeight: '100vh', overflow: 'hidden' }}>
@@ -112,7 +174,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero */}
+      {/* Hero – no floating messages, only the stack will be in the next section */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -121,128 +183,62 @@ export default function LandingPage() {
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
+        padding: '0 24px',
       }}>
-        {/* Floating messages – scroll naturally with the page */}
-        <FloatingMessage {...SAMPLE_MESSAGES[0]} delay={0} x="3%" y="15%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[1]} delay={1.5} x="62%" y="22%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[2]} delay={3} x="4%" y="60%" />
-        <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="64%" y="68%" />
-
         <motion.div
           style={{ opacity: heroOpacity }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
         >
-          <div style={{
-            textAlign: 'center',
-            maxWidth: 680,
-            margin: '0 auto',
-            padding: '0 24px',
-            position: 'relative',
-            zIndex: 5,
-          }}>
+          <div style={{ textAlign: 'center', maxWidth: 680, margin: '0 auto', position: 'relative', zIndex: 5 }}>
             {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2 }}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32 }}
-            >
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32 }}>
               <div style={{
-                padding: '6px 16px',
-                borderRadius: 100,
-                fontSize: 12,
-                color: 'rgba(167, 139, 250, 0.9)',
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                fontWeight: 600,
-                backdropFilter: 'blur(20px)',
-                background: 'rgba(255,255,255,0.04)',
+                padding: '6px 16px', borderRadius: 100, fontSize: 12,
+                color: 'rgba(167, 139, 250, 0.9)', letterSpacing: '0.08em',
+                textTransform: 'uppercase', fontWeight: 600,
+                backdropFilter: 'blur(20px)', background: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,255,255,0.08)',
               }}>
                 ✦ Anonymous. Honest. Beautiful.
               </div>
             </motion.div>
 
-            {/* Main headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.9 }}
-              className="font-display"
-              style={{
-                fontSize: 'clamp(36px, 6vw, 68px)',
-                fontWeight: 600,
-                lineHeight: 1.1,
-                letterSpacing: '-0.02em',
-                marginBottom: 24,
+            {/* Headline */}
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.9 }}
+              className="font-display" style={{
+                fontSize: 'clamp(36px, 6vw, 68px)', fontWeight: 600, lineHeight: 1.1,
+                letterSpacing: '-0.02em', marginBottom: 24,
                 background: 'linear-gradient(135deg, #e8e8f8 0%, #c4b5fd 40%, #7eb3fa 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}>
               Where emotions float anonymously in a digital heaven
             </motion.h1>
 
             {/* Subheadline */}
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+            <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
               style={{
-                fontSize: 'clamp(16px, 2.2vw, 20px)',
-                lineHeight: 1.6,
-                color: 'rgba(200, 200, 220, 0.7)',
-                marginBottom: 40,
-                fontWeight: 300,
-              }}
-            >
+                fontSize: 'clamp(16px, 2.2vw, 20px)', lineHeight: 1.6,
+                color: 'rgba(200, 200, 220, 0.7)', marginBottom: 40, fontWeight: 300,
+              }}>
               Receive anonymous thoughts from the people who never say them aloud.
             </motion.p>
 
             {/* CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.65 }}
-              style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}
-            >
-              <Link
-                to="/auth?mode=signup"
-                className="whisper-btn whisper-btn-primary animate-pulse-glow"
-                style={{ fontSize: 16, padding: '16px 36px' }}
-              >
-                Open your portal ✦
-              </Link>
-              <Link
-                to="/auth"
-                className="whisper-btn whisper-btn-ghost"
-                style={{ fontSize: 16, padding: '16px 36px' }}
-              >
-                Sign in
-              </Link>
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
+              style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <Link to="/auth?mode=signup" className="whisper-btn whisper-btn-primary animate-pulse-glow"
+                style={{ fontSize: 16, padding: '16px 36px' }}>Open your portal ✦</Link>
+              <Link to="/auth" className="whisper-btn whisper-btn-ghost"
+                style={{ fontSize: 16, padding: '16px 36px' }}>Sign in</Link>
             </motion.div>
 
             {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1 }}
-              style={{
-                display: 'flex',
-                gap: 32,
-                justifyContent: 'center',
-                marginTop: 52,
-                flexWrap: 'wrap',
-              }}
-            >
-              {[
-                { val: '100%', label: 'Anonymous' },
-                { val: 'Ad-free', label: 'Always' },
-                { val: '∞', label: 'Messages' },
-              ].map(s => (
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
+              style={{ display: 'flex', gap: 32, justifyContent: 'center', marginTop: 52, flexWrap: 'wrap' }}>
+              {[{ val: '100%', label: 'Anonymous' }, { val: 'Ad-free', label: 'Always' }, { val: '∞', label: 'Messages' }].map(s => (
                 <div key={s.label} style={{ textAlign: 'center' }}>
                   <div style={{ fontSize: 22, fontWeight: 700, color: '#a78bfa' }}>{s.val}</div>
                   <div style={{ fontSize: 12, color: 'rgba(200,200,220,0.5)', letterSpacing: '0.06em', textTransform: 'uppercase' }}>{s.label}</div>
@@ -253,42 +249,18 @@ export default function LandingPage() {
         </motion.div>
 
         {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          style={{
-            position: 'absolute',
-            bottom: 32,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 6,
-            zIndex: 5,
-          }}
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
+          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, zIndex: 5 }}>
           <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }}
-          />
+          <motion.div animate={{ y: [0, 6, 0] }} transition={{ duration: 2, repeat: Infinity }}
+            style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }} />
         </motion.div>
       </div>
 
-      {/* ===== LOWER SECTIONS – original design, untouched ===== */}
-
-      {/* Live message preview */}
-      <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
+      {/* ─── NEW: Stacked Messages Section ───────────────────────────── */}
+      <section style={{ padding: '60px 24px 80px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 40px)', marginBottom: 16, fontWeight: 600, color: '#e8e8f0' }}>
               Words people hold in silence
             </h2>
@@ -296,80 +268,26 @@ export default function LandingPage() {
               Anonymous messages waiting to reach you
             </p>
           </motion.div>
-
-          <div style={{ position: 'relative', height: 120 }}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={msgIndex}
-                initial={{ opacity: 0, y: 20, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.96 }}
-                transition={{ duration: 0.5 }}
-                className="glass-strong"
-                style={{
-                  padding: '24px 32px',
-                  borderRadius: 24,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 16,
-                  position: 'absolute',
-                  width: '100%',
-                  left: 0,
-                }}
-              >
-                <span style={{ fontSize: 28 }}>{SAMPLE_MESSAGES[msgIndex].emoji}</span>
-                <p style={{ margin: 0, fontStyle: 'italic', fontSize: 17, lineHeight: 1.5, color: 'rgba(232,232,240,0.85)', textAlign: 'left' }}>
-                  "{SAMPLE_MESSAGES[msgIndex].text}"
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <MessageStack messages={SAMPLE_MESSAGES} />
         </div>
       </section>
 
-      {/* How it works */}
+      {/* How it works – with 3D icons */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{ textAlign: 'center', marginBottom: 64 }}
-          >
-            <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 600, marginBottom: 12 }}>
-              How it works
-            </h2>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
+            <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 600, marginBottom: 12 }}>How it works</h2>
             <p style={{ color: 'rgba(200,200,220,0.5)' }}>Three simple steps to open the door</p>
           </motion.div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
             {STEPS.map((step, i) => (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className="glass"
-                style={{ padding: '32px 28px', borderRadius: 24, textAlign: 'center' }}
-              >
-                <div style={{
-                  fontSize: 36,
-                  marginBottom: 16,
-                  width: 56,
-                  height: 56,
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(79,142,247,0.2), rgba(167,139,250,0.2))',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid rgba(167,139,250,0.3)',
-                }}>
-                  {step.icon}
+              <motion.div key={step.number} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.15 }}
+                className="glass" style={{ padding: '32px 28px', borderRadius: 24, textAlign: 'center' }}>
+                <div style={{ marginBottom: 16, display: 'inline-flex' }}>
+                  {i === 0 ? <Icon3D type="sparkle" size={48} /> : i === 1 ? <Icon3D type="envelope" size={48} /> : <Icon3D type="galaxy" size={48} />}
                 </div>
-                <div style={{ fontSize: 11, color: 'rgba(167,139,250,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12, fontWeight: 600 }}>
-                  Step {step.number}
-                </div>
+                <div style={{ fontSize: 11, color: 'rgba(167,139,250,0.7)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 12, fontWeight: 600 }}>Step {step.number}</div>
                 <h3 style={{ fontSize: 20, fontWeight: 600, marginBottom: 10, color: '#e8e8f0' }}>{step.title}</h3>
                 <p style={{ fontSize: 14, lineHeight: 1.6, color: 'rgba(200,200,220,0.6)', margin: 0 }}>{step.desc}</p>
               </motion.div>
@@ -378,50 +296,25 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Features – with 3D icons */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{ textAlign: 'center', marginBottom: 64 }}
-          >
-            <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 600, marginBottom: 12 }}>
-              Built for the soul
-            </h2>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
+            <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 600, marginBottom: 12 }}>Built for the soul</h2>
           </motion.div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
             {[
-              { icon: '🔒', title: 'Fully Anonymous', desc: 'No identity. No trace. Pure honesty.' },
-              { icon: '✨', title: 'AI Moderation', desc: 'Toxic messages never reach you.' },
-              { icon: '💌', title: 'Favorite Messages', desc: 'Keep the ones that move you.' },
-              { icon: '📱', title: 'Share Anywhere', desc: 'Instagram, X, WhatsApp ready.' },
-              { icon: '🌙', title: 'Mood Themes', desc: 'Cosmic, Aurora, Nebula, Celestial.' },
-              { icon: '🔥', title: 'Daily Streaks', desc: 'Stay connected, keep the fire.' },
+              { icon: 'sparkle', title: 'Fully Anonymous', desc: 'No identity. No trace. Pure honesty.' },
+              { icon: 'star', title: 'AI Moderation', desc: 'Toxic messages never reach you.' },
+              { icon: 'heart', title: 'Favorite Messages', desc: 'Keep the ones that move you.' },
+              { icon: 'envelope', title: 'Share Anywhere', desc: 'Instagram, X, WhatsApp ready.' },
+              { icon: 'moon', title: 'Mood Themes', desc: 'Cosmic, Aurora, Nebula, Celestial.' },
+              { icon: 'galaxy', title: 'Daily Streaks', desc: 'Stay connected, keep the fire.' },
             ].map((f, i) => (
-              <motion.div
-                key={f.title}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="glass"
-                style={{ padding: '24px 20px', borderRadius: 20, textAlign: 'center' }}
-              >
-                <div style={{
-                  fontSize: 26,
-                  marginBottom: 10,
-                  width: 48,
-                  height: 48,
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, rgba(79,142,247,0.15), rgba(167,139,250,0.15))',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '1px solid rgba(167,139,250,0.2)',
-                }}>
-                  {f.icon}
+              <motion.div key={f.title} initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}
+                className="glass" style={{ padding: '24px 20px', borderRadius: 20, textAlign: 'center' }}>
+                <div style={{ marginBottom: 10, display: 'inline-flex' }}>
+                  <Icon3D type={f.icon} size={40} />
                 </div>
                 <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 6, color: '#e8e8f0' }}>{f.title}</div>
                 <div style={{ fontSize: 12, color: 'rgba(200,200,220,0.5)', lineHeight: 1.5 }}>{f.desc}</div>
@@ -433,16 +326,9 @@ export default function LandingPage() {
 
       {/* Final CTA */}
       <section style={{ padding: '100px 24px 120px', position: 'relative', zIndex: 3, textAlign: 'center' }}>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <div style={{
-            maxWidth: 560,
-            margin: '0 auto',
-            padding: '56px 40px',
-            borderRadius: 32,
+            maxWidth: 560, margin: '0 auto', padding: '56px 40px', borderRadius: 32,
             background: 'linear-gradient(135deg, rgba(79,142,247,0.1) 0%, rgba(167,139,250,0.1) 100%)',
             border: '1px solid rgba(167,139,250,0.2)',
           }}>
