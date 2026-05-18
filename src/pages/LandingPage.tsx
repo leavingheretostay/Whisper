@@ -107,13 +107,13 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Dedicated Floating Messages Section */}
+      {/* Floating messages – moved up, right below the nav */}
       <div style={{
         position: 'absolute',
-        top: 90,
+        top: 80,
         left: 0,
         right: 0,
-        height: 150,
+        height: 110,
         zIndex: 2,
         pointerEvents: 'none',
         overflow: 'visible',
@@ -124,7 +124,7 @@ export default function LandingPage() {
         <FloatingMessage {...SAMPLE_MESSAGES[3]} delay={4.5} x="56%" y="68%" />
       </div>
 
-      {/* Hero – no parallax movement */}
+      {/* Hero – content starts well below the floating messages */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -132,11 +132,12 @@ export default function LandingPage() {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: '240px', // slightly tighter to bring scroll indicator into view
+        paddingTop: '210px',  // gives space between floating messages and badge
         overflow: 'visible',
       }}>
+        {/* Badge, headline, CTA – original spacing between badge and headline preserved */}
         <motion.div
-          style={{ opacity: heroOpacity, zIndex: 5, position: 'relative', marginTop: '20px' }} // badge a little lower
+          style={{ opacity: heroOpacity, zIndex: 5, position: 'relative' }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
@@ -232,7 +233,59 @@ export default function LandingPage() {
           </div>
         </motion.div>
 
-        {/* Stats */}
+        {/* Scroll indicator – placed right after the CTA with matching spacing */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 6,
+            marginTop: '20px',   // same approximate spacing as between the two CTA buttons
+            zIndex: 5,
+          }}
+        >
+          <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }}
+          />
+        </motion.div>
+
+        {/* Glowing star/comet line – new decorative element */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.8 }}
+          style={{
+            width: '120px',
+            height: '2px',
+            margin: '24px auto 0',
+            position: 'relative',
+            background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.6), transparent)',
+            zIndex: 5,
+          }}
+        >
+          <motion.div
+            animate={{ left: ['0%', '100%'] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+            style={{
+              position: 'absolute',
+              top: '-4px',
+              left: 0,
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: '#a78bfa',
+              boxShadow: '0 0 10px #a78bfa, 0 0 20px #a78bfa',
+            }}
+          />
+        </motion.div>
+
+        {/* Stats – exactly where they were before, now after the comet line */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -241,7 +294,7 @@ export default function LandingPage() {
             display: 'flex',
             gap: 40,
             justifyContent: 'center',
-            marginTop: 100,
+            marginTop: 60,
             flexWrap: 'wrap',
             position: 'relative',
             zIndex: 5,
@@ -259,31 +312,9 @@ export default function LandingPage() {
             </div>
           ))}
         </motion.div>
-
-        {/* Scroll indicator – now in flow, just below stats */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 6,
-            marginTop: '40px',
-            zIndex: 5,
-          }}
-        >
-          <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Scroll</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            style={{ width: 1, height: 24, background: 'linear-gradient(to bottom, rgba(167,139,250,0.6), transparent)' }}
-          />
-        </motion.div>
       </div>
 
-      {/* Live message preview */}
+      {/* Live message preview – unchanged */}
       <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div
