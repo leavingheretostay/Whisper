@@ -21,7 +21,6 @@ const STEPS = [
   { number: "03", title: "Receive the unspoken", desc: "Messages arrive anonymously. Words people have been holding for years." },
 ];
 
-// ─── 3D Icons (pure CSS, no emojis) ────────────────────────────────
 const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
   const s = size;
   const half = s / 2;
@@ -30,80 +29,82 @@ const Icon3D = ({ type, size = 40 }: { type: string; size?: number }) => {
     alignItems: 'center', justifyContent: 'center',
   };
 
-  switch (type) {
-    case 'sparkle':
-      return (
-        <div style={common}>
-          <div style={{
-            width: '60%', height: '60%', background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-            borderRadius: '30%', transform: 'rotate(45deg)',
-            boxShadow: '0 0 20px rgba(251,191,36,0.6), 0 0 40px rgba(245,158,11,0.3)',
-          }} />
-        </div>
-      );
-    case 'moon':
-      return (
-        <div style={common}>
-          <div style={{
-            width: '65%', height: '65%', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #e5e7eb, #9ca3af)',
-            boxShadow: '0 0 25px rgba(229,231,235,0.5), inset 0 0 10px rgba(0,0,0,0.2)',
-          }} />
-        </div>
-      );
-    case 'star':
-      return (
-        <div style={common}>
-          <div style={{
-            width: 0, height: 0, borderLeft: `${half*0.3}px solid transparent`,
-            borderRight: `${half*0.3}px solid transparent`,
-            borderBottom: `${half*0.6}px solid #a78bfa`,
-            filter: 'drop-shadow(0 0 8px #a78bfa)',
-          }} />
-        </div>
-      );
-    case 'galaxy':
-      return (
-        <div style={common}>
-          <div style={{
-            width: '65%', height: '65%', borderRadius: '50%',
-            background: 'radial-gradient(circle at 30% 30%, #4f8ef7, #1e1b4b)',
-            boxShadow: '0 0 30px rgba(79,142,247,0.6)',
-          }} />
-        </div>
-      );
-    case 'heart':
-      return (
-        <div style={{ ...common, transform: 'rotate(-45deg)' }}>
-          <div style={{
-            width: '50%', height: '50%', background: 'linear-gradient(135deg, #f87171, #dc2626)',
-            borderRadius: '0 0 0 10px',
-            boxShadow: '0 0 20px rgba(248,113,113,0.6)',
-          }} />
-        </div>
-      );
-    case 'envelope':
-      return (
-        <div style={common}>
-          <div style={{
-            width: '70%', height: '50%', background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
-            borderRadius: '4px', boxShadow: '0 0 15px rgba(96,165,250,0.5)',
-            position: 'relative',
-          }}>
-            <div style={{
-              position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)',
-              width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
-              borderBottom: '10px solid #3b82f6',
-            }} />
-          </div>
-        </div>
-      );
-    default:
-      return <div style={{ ...common, background: '#333', borderRadius: '50%' }} />;
+  if (type === 'sparkle') {
+    return (
+      <div style={common}>
+        <div style={{
+          width: '60%', height: '60%', background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
+          borderRadius: '30%', transform: 'rotate(45deg)',
+          boxShadow: '0 0 20px rgba(251,191,36,0.6), 0 0 40px rgba(245,158,11,0.3)',
+        }} />
+      </div>
+    );
   }
+  if (type === 'moon') {
+    return (
+      <div style={common}>
+        <div style={{
+          width: '65%', height: '65%', borderRadius: '50%',
+          background: 'linear-gradient(135deg, #e5e7eb, #9ca3af)',
+          boxShadow: '0 0 25px rgba(229,231,235,0.5), inset 0 0 10px rgba(0,0,0,0.2)',
+        }} />
+      </div>
+    );
+  }
+  if (type === 'star') {
+    return (
+      <div style={common}>
+        <div style={{
+          width: 0, height: 0, borderLeft: `${half * 0.3}px solid transparent`,
+          borderRight: `${half * 0.3}px solid transparent`,
+          borderBottom: `${half * 0.6}px solid #a78bfa`,
+          filter: 'drop-shadow(0 0 8px #a78bfa)',
+        }} />
+      </div>
+    );
+  }
+  if (type === 'galaxy') {
+    return (
+      <div style={common}>
+        <div style={{
+          width: '65%', height: '65%', borderRadius: '50%',
+          background: 'radial-gradient(circle at 30% 30%, #4f8ef7, #1e1b4b)',
+          boxShadow: '0 0 30px rgba(79,142,247,0.6)',
+        }} />
+      </div>
+    );
+  }
+  if (type === 'heart') {
+    return (
+      <div style={{ ...common, transform: 'rotate(-45deg)' }}>
+        <div style={{
+          width: '50%', height: '50%', background: 'linear-gradient(135deg, #f87171, #dc2626)',
+          borderRadius: '0 0 0 10px',
+          boxShadow: '0 0 20px rgba(248,113,113,0.6)',
+        }} />
+      </div>
+    );
+  }
+  if (type === 'envelope') {
+    return (
+      <div style={common}>
+        <div style={{
+          width: '70%', height: '50%', background: 'linear-gradient(135deg, #60a5fa, #3b82f6)',
+          borderRadius: '4px', boxShadow: '0 0 15px rgba(96,165,250,0.5)',
+          position: 'relative',
+        }}>
+          <div style={{
+            position: 'absolute', top: '-30%', left: '50%', transform: 'translateX(-50%)',
+            width: 0, height: 0, borderLeft: '8px solid transparent', borderRight: '8px solid transparent',
+            borderBottom: '10px solid #3b82f6',
+          }} />
+        </div>
+      </div>
+    );
+  }
+  return <div style={{ ...common, background: '#333', borderRadius: '50%' }} />;
 };
 
-// ─── Floating Message (used in hero) ──────────────────────────────
 function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: string; delay: number; x: string; y: string }) {
   return (
     <motion.div
@@ -139,7 +140,6 @@ function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: stri
   );
 }
 
-// ─── Scattered Floating Messages (desktop only) ──────────────────
 const DesktopFloatingMessages = () => {
   const messages = [
     { ...SAMPLE_MESSAGES[0], delay: 0, x: '2%', y: '12%' },
@@ -158,16 +158,11 @@ const DesktopFloatingMessages = () => {
       {messages.map((msg, i) => (
         <FloatingMessage key={i} text={msg.text} icon={msg.icon} delay={msg.delay} x={msg.x} y={msg.y} />
       ))}
-      <style>{`
-        @media (min-width: 768px) {
-          .desktop-floating { display: block !important; }
-        }
-      `}</style>
+      <style>{`@media (min-width: 768px) { .desktop-floating { display: block !important; } }`}</style>
     </div>
   );
 };
 
-// ─── Stacked Card Carousel (below hero) ───────────────────────────
 function MessageStack({ messages }: { messages: typeof SAMPLE_MESSAGES }) {
   const [index, setIndex] = useState(0);
 
@@ -217,7 +212,6 @@ export default function LandingPage() {
     <div style={{ position: 'relative', background: '#060614', minHeight: '100vh', overflow: 'hidden' }}>
       <CosmicCanvas theme="cosmic" />
 
-      {/* Nav */}
       <nav className="whisper-nav">
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
           <div style={{
@@ -241,7 +235,6 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero – with desktop floating messages */}
       <div ref={heroRef} style={{
         position: 'relative',
         minHeight: '100vh',
@@ -261,7 +254,6 @@ export default function LandingPage() {
           transition={{ duration: 1.2, ease: [0, 0, 0, 1] }}
         >
           <div style={{ textAlign: 'center', maxWidth: 680, margin: '0 auto', position: 'relative', zIndex: 5 }}>
-            {/* Badge */}
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32 }}>
               <div style={{
@@ -275,7 +267,6 @@ export default function LandingPage() {
               </div>
             </motion.div>
 
-            {/* Headline */}
             <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.9 }}
               className="font-display" style={{
                 fontSize: 'clamp(36px, 6vw, 68px)', fontWeight: 600, lineHeight: 1.1,
@@ -286,7 +277,6 @@ export default function LandingPage() {
               Where emotions float anonymously in a digital heaven
             </motion.h1>
 
-            {/* Subheadline */}
             <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
               style={{
                 fontSize: 'clamp(16px, 2.2vw, 20px)', lineHeight: 1.6,
@@ -295,7 +285,6 @@ export default function LandingPage() {
               Receive anonymous thoughts from the people who never say them aloud.
             </motion.p>
 
-            {/* CTA */}
             <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65 }}
               style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link to="/auth?mode=signup" className="whisper-btn whisper-btn-primary animate-pulse-glow"
@@ -304,7 +293,6 @@ export default function LandingPage() {
                 style={{ fontSize: 16, padding: '16px 36px' }}>Sign in</Link>
             </motion.div>
 
-            {/* Stats */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}
               style={{ display: 'flex', gap: 32, justifyContent: 'center', marginTop: 52, flexWrap: 'wrap' }}>
               {[{ val: '100%', label: 'Anonymous' }, { val: 'Ad-free', label: 'Always' }, { val: '∞', label: 'Messages' }].map(s => (
@@ -315,7 +303,6 @@ export default function LandingPage() {
               ))}
             </motion.div>
 
-            {/* Scroll indicator */}
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
               style={{
                 display: 'flex',
@@ -337,7 +324,6 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* Stacked messages section – 40px gap */}
       <section style={{ padding: '40px 24px 16px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
@@ -352,7 +338,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works – 40px gap */}
       <section style={{ padding: '24px 24px 16px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -376,7 +361,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features – 40px gap */}
       <section style={{ padding: '24px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -404,7 +388,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Final CTA */}
       <section style={{ padding: '60px 24px 80px', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <div style={{
@@ -425,7 +408,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Footer with icons */}
       <footer style={{
         padding: '24px 32px',
         borderTop: '1px solid rgba(255,255,255,0.05)',
@@ -442,7 +424,6 @@ export default function LandingPage() {
         </p>
 
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center', justifyContent: 'center' }}>
-          {/* Instagram */}
           <a
             href="https://instagram.com/nacirlone"
             target="_blank"
@@ -463,7 +444,6 @@ export default function LandingPage() {
             </svg>
           </a>
 
-          {/* Donate via UPI */}
           <a
             href="upi://pay?pa=lonenasir724@okaxis&pn=Whisper&cu=INR"
             title="Donate via UPI"
@@ -482,7 +462,6 @@ export default function LandingPage() {
             </svg>
           </a>
 
-          {/* Email for bugs */}
           <a
             href="mailto:lonenasir724@gmail.com?subject=Whisper%20Bug%20Report"
             title="Report a bug"
