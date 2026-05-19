@@ -324,7 +324,7 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      <section style={{ padding: '40px 24px 16px', position: 'relative', zIndex: 3 }}>
+      <section style={{ padding: '24px 24px 16px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 40px)', marginBottom: 16, fontWeight: 600, color: '#e8e8f0' }}>
@@ -361,9 +361,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section style={{ padding: '24px 24px', position: 'relative', zIndex: 3 }}>
+      <section style={{ padding: '80px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
-          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
+          <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 64 }}>
             <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 600, marginBottom: 12 }}>Built for the soul</h2>
           </motion.div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16 }}>
@@ -388,7 +388,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section style={{ padding: '60px 24px 80px', position: 'relative', zIndex: 3, textAlign: 'center' }}>
+      <section style={{ padding: '100px 24px 120px', position: 'relative', zIndex: 3, textAlign: 'center' }}>
         <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <div style={{
             maxWidth: 560, margin: '0 auto', padding: '56px 40px', borderRadius: 32,
