@@ -1,88 +1,300 @@
-/* ─── Perfect Rounded Glow Fix ─── */
+/* Whisper - Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background: #060614;
+  color: #e8e8f0;
+  font-family: 'Inter', 'Open Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a1e; }
+::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3a6a; }
+
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glow-text {
+  text-shadow: 0 0 30px rgba(79, 142, 247, 0.6), 0 0 60px rgba(79, 142, 247, 0.2);
+}
+
+.glow-text-soft {
+  text-shadow: 0 0 20px rgba(167, 139, 250, 0.4);
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(79, 142, 247, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(79, 142, 247, 0.6), 0 0 80px rgba(79, 142, 247, 0.2); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes starTwinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.animate-float { animation: float 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
+.animate-fade-in-up { animation: fadeInUp 0.7s ease forwards; }
+
+/* ─── Buttons with glow clipped inside ─── */
 .whisper-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-
   padding: 14px 32px;
-
+  border-radius: 100px;
   border: none;
-  border-radius: 999px;
-
   cursor: pointer;
-  position: relative;
-
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.02em;
-
-  text-decoration: none;
-
+  transition: all 0.3s cubic-bezier(0, 0, 0, 1);
+  position: relative;
   overflow: hidden;
-
-  isolation: isolate;
-
-  transform: translateZ(0);
-  backface-visibility: hidden;
-
-  transition:
-    transform 0.3s cubic-bezier(0,0,0,1),
-    box-shadow 0.3s ease,
-    background 0.3s ease,
-    border-color 0.3s ease,
-    color 0.3s ease;
+  text-decoration: none;
+  z-index: 1;
 }
 
-/* Inner clipping layer */
-.whisper-btn::before {
-  content: "";
+/* Inner glow layer — clipped by overflow:hidden on parent */
+.whisper-btn::after {
+  content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
   z-index: -1;
 }
 
-/* Primary */
 .whisper-btn-primary {
   background: linear-gradient(135deg, #4f8ef7 0%, #a78bfa 100%);
   color: white;
+}
 
-  box-shadow:
-    0 4px 24px rgba(79, 142, 247, 0.35),
-    0 0 0 rgba(79, 142, 247, 0);
+.whisper-btn-primary::after {
+  background: radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 70%);
 }
 
 .whisper-btn-primary:hover {
   transform: translateY(-2px) scale(1.02);
+}
 
-  box-shadow:
-    0 8px 34px rgba(79, 142, 247, 0.45),
-    0 0 24px rgba(79, 142, 247, 0.25);
+.whisper-btn-primary:hover::after {
+  opacity: 1;
 }
 
 .whisper-btn-primary:active {
-  transform: scale(0.98);
+  transform: translateY(0) scale(0.98);
 }
 
-/* Ghost */
 .whisper-btn-ghost {
   background: rgba(255,255,255,0.06);
   color: rgba(232,232,240,0.8);
-
   border: 1px solid rgba(255,255,255,0.1);
+}
 
-  box-shadow: 0 0 0 rgba(255,255,255,0);
+.whisper-btn-ghost::after {
+  background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%);
 }
 
 .whisper-btn-ghost:hover {
   background: rgba(255,255,255,0.1);
   color: white;
-
   border-color: rgba(255,255,255,0.2);
+}
 
-  box-shadow:
-    0 6px 24px rgba(255,255,255,0.08);
+.whisper-btn-ghost:hover::after {
+  opacity: 1;
+}
+
+.whisper-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #e8e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding: 14px 18px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.whisper-input:focus {
+  border-color: rgba(79, 142, 247, 0.6);
+  box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.whisper-input::placeholder {
+  color: rgba(232, 232, 240, 0.3);
+}
+
+.whisper-textarea {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #e8e8f0;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding: 14px 18px;
+  outline: none;
+  transition: all 0.2s ease;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.whisper-textarea:focus {
+  border-color: rgba(79, 142, 247, 0.6);
+  box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.whisper-textarea::placeholder {
+  color: rgba(232, 232, 240, 0.3);
+}
+
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+.message-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0, 0, 0, 1);
+}
+
+.message-card:hover {
+  border-color: rgba(79, 142, 247, 0.3);
+  box-shadow: 0 8px 40px rgba(79, 142, 247, 0.1);
+  transform: translateY(-2px);
+}
+
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
+.whisper-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  margin: 0;
+}
+
+.whisper-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(6, 6, 20, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.whisper-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  padding: 14px 20px;
+  border-radius: 14px;
+  background: rgba(20, 20, 50, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #e8e8f0;
+  font-size: 14px;
+  animation: fadeInUp 0.4s ease;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.whisper-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(79, 142, 247, 0.2);
+  border-top-color: #4f8ef7;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+a.whisper-link {
+  color: #7eb3fa;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a.whisper-link:hover {
+  color: #a5c8ff;
+}
+
+@media (max-width: 768px) {
+  .whisper-nav {
+    padding: 14px 20px;
+  }
 }
