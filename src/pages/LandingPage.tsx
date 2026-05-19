@@ -149,7 +149,7 @@ const DesktopFloatingMessages = () => {
     { ...SAMPLE_MESSAGES[4], delay: 5, x: '8%', y: '72%' },
     { ...SAMPLE_MESSAGES[5], delay: 6.2, x: '80%', y: '70%' },
     { ...SAMPLE_MESSAGES[6], delay: 1.8, x: '30%', y: '15%' },
-    { ...SAMPLE_MESSAGES[7], delay: 3, x: '60%', y: '18%' },
+    { ...SAMPLE_MESSAGES[7], delay: 3, x: '75%', y: '20%' },
     { ...SAMPLE_MESSAGES[8], delay: 4.3, x: '15%', y: '55%' },
   ];
 
