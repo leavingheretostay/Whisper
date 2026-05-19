@@ -85,6 +85,7 @@ html, body {
 .animate-pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
 .animate-fade-in-up { animation: fadeInUp 0.7s ease forwards; }
 
+/* ─── Fixed: Glow clipped inside rounded corners ─── */
 .whisper-btn {
   display: inline-flex;
   align-items: center;
@@ -102,12 +103,17 @@ html, body {
   position: relative;
   overflow: hidden;
   text-decoration: none;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+  isolation: isolate;
 }
 
 .whisper-btn-primary {
   background: linear-gradient(135deg, #4f8ef7 0%, #a78bfa 100%);
   color: white;
   box-shadow: 0 4px 24px rgba(79, 142, 247, 0.4);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 }
 
 .whisper-btn-primary:hover {
@@ -123,6 +129,8 @@ html, body {
   background: rgba(255,255,255,0.06);
   color: rgba(232,232,240,0.8);
   border: 1px solid rgba(255,255,255,0.1);
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 }
 
 .whisper-btn-ghost:hover {
