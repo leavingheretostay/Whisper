@@ -343,8 +343,8 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* Stacked messages section – reduced top/bottom padding */}
-      <section style={{ padding: '20px 24px 30px', position: 'relative', zIndex: 3 }}>
+      {/* Stacked messages section */}
+      <section style={{ padding: '40px 24px 50px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 40px)', marginBottom: 16, fontWeight: 600, color: '#e8e8f0' }}>
@@ -358,8 +358,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works – reduced top padding to tighten gap after carousel */}
-      <section style={{ padding: '20px 24px 40px', position: 'relative', zIndex: 3 }}>
+      {/* How it works */}
+      <section style={{ padding: '40px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 600, marginBottom: 12 }}>How it works</h2>
@@ -382,7 +382,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features – unchanged from before (still the same perfect spacing) */}
+      {/* Features */}
       <section style={{ padding: '40px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
