@@ -343,8 +343,8 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* Stacked messages section */}
-      <section style={{ padding: '24px 24px 36px', position: 'relative', zIndex: 3 }}>
+      {/* Stacked messages section – 64px gap above (matching "Built for the soul") */}
+      <section style={{ padding: '64px 24px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
             <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 40px)', marginBottom: 16, fontWeight: 600, color: '#e8e8f0' }}>
@@ -358,8 +358,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section style={{ padding: '24px 24px', position: 'relative', zIndex: 3 }}>
+      {/* How it works – top padding gives 64px total gap from card above */}
+      <section style={{ padding: '40px 24px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
             <h2 className="font-display" style={{ fontSize: 'clamp(26px, 4vw, 42px)', fontWeight: 600, marginBottom: 12 }}>How it works</h2>
@@ -382,7 +382,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Features – untouched, reference gap is above this heading */}
       <section style={{ padding: '40px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
