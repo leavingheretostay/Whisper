@@ -143,14 +143,14 @@ function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: stri
 const DesktopFloatingMessages = () => {
   const messages = [
     { ...SAMPLE_MESSAGES[0], delay: 0, x: '2%', y: '12%' },
-    { ...SAMPLE_MESSAGES[1], delay: 1.2, x: '75%', y: '10%' },
+    { ...SAMPLE_MESSAGES[1], delay: 1.2, x: '75%', y: '15%' },
     { ...SAMPLE_MESSAGES[2], delay: 2.5, x: '5%', y: '45%' },
     { ...SAMPLE_MESSAGES[3], delay: 3.7, x: '78%', y: '40%' },
-    { ...SAMPLE_MESSAGES[4], delay: 5, x: '8%', y: '72%' },
-    { ...SAMPLE_MESSAGES[5], delay: 6.2, x: '20%', y: '25%' },
+    { ...SAMPLE_MESSAGES[4], delay: 5, x: '8%', y: '77%' },
+    { ...SAMPLE_MESSAGES[5], delay: 6.2, x: '16%', y: '25%' },
     { ...SAMPLE_MESSAGES[6], delay: 1.8, x: '35%', y: '9%' },
     { ...SAMPLE_MESSAGES[7], delay: 3, x: '65%', y: '70%' },
-    { ...SAMPLE_MESSAGES[8], delay: 4.3, x: '75%', y: '25%' },
+    { ...SAMPLE_MESSAGES[8], delay: 4.3, x: '75%', y: '30%' },
   ];
 
   return (
