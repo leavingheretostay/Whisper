@@ -142,15 +142,15 @@ function FloatingMessage({ text, icon, delay, x, y }: { text: string; icon: stri
 // ─── Scattered Floating Messages (desktop only) ──────────────────
 const DesktopFloatingMessages = () => {
   const messages = [
-    { ...SAMPLE_MESSAGES[0], delay: 0, x: '2%', y: '10%' },
-    { ...SAMPLE_MESSAGES[1], delay: 1.5, x: '78%', y: '8%' },
-    { ...SAMPLE_MESSAGES[2], delay: 2.8, x: '1%', y: '35%' },
-    { ...SAMPLE_MESSAGES[3], delay: 4, x: '80%', y: '38%' },
-    { ...SAMPLE_MESSAGES[4], delay: 5.2, x: '2%', y: '65%' },
-    { ...SAMPLE_MESSAGES[5], delay: 6.5, x: '77%', y: '68%' },
-    { ...SAMPLE_MESSAGES[6], delay: 1, x: '1%', y: '50%' },
-    { ...SAMPLE_MESSAGES[7], delay: 3.2, x: '79%', y: '52%' },
-    { ...SAMPLE_MESSAGES[8], delay: 4.5, x: '40%', y: '6%' },
+    { ...SAMPLE_MESSAGES[0], delay: 0, x: '2%', y: '12%' },
+    { ...SAMPLE_MESSAGES[1], delay: 1.2, x: '75%', y: '10%' },
+    { ...SAMPLE_MESSAGES[2], delay: 2.5, x: '5%', y: '45%' },
+    { ...SAMPLE_MESSAGES[3], delay: 3.7, x: '78%', y: '40%' },
+    { ...SAMPLE_MESSAGES[4], delay: 5, x: '8%', y: '72%' },
+    { ...SAMPLE_MESSAGES[5], delay: 6.2, x: '80%', y: '70%' },
+    { ...SAMPLE_MESSAGES[6], delay: 1.8, x: '30%', y: '15%' },
+    { ...SAMPLE_MESSAGES[7], delay: 3, x: '60%', y: '18%' },
+    { ...SAMPLE_MESSAGES[8], delay: 4.3, x: '15%', y: '55%' },
   ];
 
   return (
@@ -161,12 +161,6 @@ const DesktopFloatingMessages = () => {
       <style>{`
         @media (min-width: 768px) {
           .desktop-floating { display: block !important; }
-          .desktop-floating > div { max-width: 160px !important; }
-          .desktop-floating span { font-size: 10px !important; }
-        }
-        @media (min-width: 1200px) {
-          .desktop-floating > div { max-width: 200px !important; }
-          .desktop-floating span { font-size: 11px !important; }
         }
       `}</style>
     </div>
@@ -343,7 +337,7 @@ export default function LandingPage() {
         </motion.div>
       </div>
 
-      {/* Stacked messages section – 40px gap above heading */}
+      {/* Stacked messages section – 40px gap */}
       <section style={{ padding: '40px 24px 16px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
@@ -358,7 +352,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works – 16px bottom + 24px top = 40px gap from card */}
+      {/* How it works – 40px gap */}
       <section style={{ padding: '24px 24px 16px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
@@ -382,7 +376,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features – top 24px gives 40px gap from the How it works cards */}
+      {/* Features – 40px gap */}
       <section style={{ padding: '24px 24px', position: 'relative', zIndex: 3 }}>
         <div style={{ maxWidth: 960, margin: '0 auto' }}>
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ textAlign: 'center', marginBottom: 40 }}>
