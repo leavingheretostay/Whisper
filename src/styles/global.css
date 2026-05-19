@@ -85,7 +85,7 @@ html, body {
 .animate-pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
 .animate-fade-in-up { animation: fadeInUp 0.7s ease forwards; }
 
-/* ─── Buttons with glow clipped inside ─── */
+/* ─── BUTTONS WITH GLOW CLIPPED TO ROUNDED EDGES ─── */
 .whisper-btn {
   display: inline-flex;
   align-items: center;
@@ -104,18 +104,12 @@ html, body {
   overflow: hidden;
   text-decoration: none;
   z-index: 1;
-}
-
-/* Inner glow layer — clipped by overflow:hidden on parent */
-.whisper-btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: -1;
+  /* Force hardware acceleration for clean clipping */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  /* Physically clip the entire button to border-radius */
+  clip-path: inset(0 round 100px);
+  -webkit-clip-path: inset(0 round 100px);
 }
 
 .whisper-btn-primary {
@@ -123,12 +117,21 @@ html, body {
   color: white;
 }
 
+/* Inner glow via pseudo-element, stays inside because of overflow:hidden */
 .whisper-btn-primary::after {
-  background: radial-gradient(circle at center, rgba(255,255,255,0.4) 0%, transparent 70%);
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .whisper-btn-primary:hover {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-2px) scale(1.02) translateZ(0);
 }
 
 .whisper-btn-primary:hover::after {
@@ -136,7 +139,7 @@ html, body {
 }
 
 .whisper-btn-primary:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0) scale(0.98) translateZ(0);
 }
 
 .whisper-btn-ghost {
@@ -146,7 +149,15 @@ html, body {
 }
 
 .whisper-btn-ghost::after {
-  background: radial-gradient(circle at center, rgba(255,255,255,0.15) 0%, transparent 70%);
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: -1;
 }
 
 .whisper-btn-ghost:hover {
