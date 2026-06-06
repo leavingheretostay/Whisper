@@ -23,13 +23,12 @@
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
-          appId: "YOUR-ONE-SIGNAL-APP-ID",   // ← Replace with your actual OneSignal App ID
+          appId: "ce38b49f-559f-46b7-a2c9-3a0de79bea90",
+          safari_web_id: "web.onesignal.auto.3d5e9a66-9429-4fce-a7e3-61aa58d6c253",
           notifyButton: {
             enable: true,
           },
-          allowLocalhostAsSecureOrigin: false,
         });
-        OneSignal.showSlidedown(); // optional – shows subscription prompt
       });
     </script>
   </head>
