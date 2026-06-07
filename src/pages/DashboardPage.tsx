@@ -194,6 +194,17 @@ function MessageCard({ msg, onFavorite, onDelete, onReply }: {
   );
 }
 
+// Notification Bell Icon (CSS-drawn, no emoji)
+function BellIcon({ active }: { active: boolean }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill={active ? '#a78bfa' : 'rgba(200,200,220,0.5)'} stroke={active ? '#a78bfa' : 'rgba(200,200,220,0.5)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'all 0.2s ease' }}>
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+      <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      {active && <circle cx="17" cy="6" r="4" fill="#a78bfa" stroke="none" />}
+    </svg>
+  );
+}
+
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -207,6 +218,7 @@ export default function DashboardPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [bio, setBio] = useState('');
   const [savingBio, setSavingBio] = useState(false);
+  const [pushSubscribed, setPushSubscribed] = useState(false);
   const lastMessageId = useRef<string | null>(null);
 
   // Request notification permission
@@ -214,6 +226,21 @@ export default function DashboardPage() {
     if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
       Notification.requestPermission();
     }
+  }, []);
+
+  // Check Pushpad subscription status on load
+  useEffect(() => {
+    const checkPushpad = () => {
+      if ((window as any).Pushpad) {
+        (window as any).Pushpad.isSubscribed().then((subscribed: boolean) => {
+          setPushSubscribed(subscribed);
+        });
+      }
+    };
+    // Check immediately and also after a delay for script load
+    checkPushpad();
+    const t = setTimeout(checkPushpad, 3000);
+    return () => clearTimeout(t);
   }, []);
 
   useEffect(() => {
@@ -296,22 +323,27 @@ export default function DashboardPage() {
     return () => clearInterval(poll);
   }, [user]);
 
-  // Pushpad subscribe function
-  const handleEnableNotifications = () => {
-    if ((window as any).Pushpad) {
-      const pushpad = new (window as any).Pushpad({
-        projectId: 9153,
-        serviceWorkerPath: '/pushpad-worker.js',
+  // Pushpad subscribe / unsubscribe
+  const handleToggleNotifications = () => {
+    if (!(window as any).Pushpad) {
+      showToast('Notification service loading... Try again in a moment.');
+      return;
+    }
+
+    if (pushSubscribed) {
+      (window as any).Pushpad.unsubscribe().then(() => {
+        setPushSubscribed(false);
+        showToast('🔕 Notifications disabled');
       });
-      pushpad.subscribe((subscribed: boolean) => {
+    } else {
+      (window as any).Pushpad.subscribe().then((subscribed: boolean) => {
+        setPushSubscribed(subscribed);
         if (subscribed) {
           showToast('🔔 Notifications enabled!');
         } else {
-          showToast('❌ Subscription failed');
+          showToast('❌ Subscription failed. Please allow notifications in your browser settings.');
         }
       });
-    } else {
-      showToast('Pushpad not loaded yet. Refresh and try again.');
     }
   };
 
@@ -407,9 +439,6 @@ export default function DashboardPage() {
           <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 600 }}>Whisper</span>
         </Link>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <button onClick={handleEnableNotifications} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>
-            🔔 Enable
-          </button>
           <button onClick={() => setShowSettings(!showSettings)} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>
             ⚙ Settings
           </button>
@@ -447,7 +476,48 @@ export default function DashboardPage() {
         <AnimatePresence>
           {showSettings && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="glass" style={{ borderRadius: 20, marginBottom: 24, overflow: 'hidden' }}>
-              <div style={{ padding: '24px' }}><h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Profile Settings</h3><label style={{ fontSize: 12, color: 'rgba(200,200,220,0.55)', display: 'block', marginBottom: 6, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Bio</label><textarea className="whisper-textarea" style={{ minHeight: 80, fontSize: 14 }} placeholder="A short description that appears on your profile..." value={bio} onChange={e => setBio(e.target.value)} maxLength={160} /><div style={{ display: 'flex', gap: 10, marginTop: 12 }}><button className="whisper-btn whisper-btn-primary" onClick={saveBio} disabled={savingBio} style={{ padding: '10px 24px', fontSize: 13 }}>{savingBio ? 'Saving...' : 'Save changes'}</button><button className="whisper-btn whisper-btn-ghost" onClick={() => setShowSettings(false)} style={{ padding: '10px 20px', fontSize: 13 }}>Cancel</button></div></div>
+              <div style={{ padding: '24px' }}>
+                <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Profile Settings</h3>
+                <label style={{ fontSize: 12, color: 'rgba(200,200,220,0.55)', display: 'block', marginBottom: 6, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Bio</label>
+                <textarea className="whisper-textarea" style={{ minHeight: 80, fontSize: 14 }} placeholder="A short description that appears on your profile..." value={bio} onChange={e => setBio(e.target.value)} maxLength={160} />
+                
+                {/* Notification toggle inside settings */}
+                <div style={{ marginTop: 20, padding: '16px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <BellIcon active={pushSubscribed} />
+                      <div>
+                        <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: '#e8e8f0' }}>Push Notifications</p>
+                        <p style={{ margin: 0, fontSize: 11, color: 'rgba(200,200,220,0.4)' }}>
+                          {pushSubscribed ? 'You will receive notifications for new whispers' : 'Get notified when someone sends you a message'}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={handleToggleNotifications}
+                      style={{
+                        padding: '8px 16px',
+                        borderRadius: 20,
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: 12,
+                        fontWeight: 600,
+                        fontFamily: 'Inter, sans-serif',
+                        background: pushSubscribed ? 'rgba(167,139,250,0.2)' : 'rgba(79,142,247,0.3)',
+                        color: pushSubscribed ? '#a78bfa' : '#7eb3fa',
+                        transition: 'all 0.2s ease',
+                      }}
+                    >
+                      {pushSubscribed ? 'Disable' : 'Enable'}
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
+                  <button className="whisper-btn whisper-btn-primary" onClick={saveBio} disabled={savingBio} style={{ padding: '10px 24px', fontSize: 13 }}>{savingBio ? 'Saving...' : 'Save changes'}</button>
+                  <button className="whisper-btn whisper-btn-ghost" onClick={() => setShowSettings(false)} style={{ padding: '10px 20px', fontSize: 13 }}>Cancel</button>
+                </div>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
