@@ -47,154 +47,41 @@ function MessageCard({ msg, onFavorite, onDelete, onReply }: {
   };
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 20, scale: 0.97 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95, y: -10 }}
-      transition={{ duration: 0.4 }}
-      className="message-card"
-      style={{ padding: '24px', position: 'relative', overflow: 'hidden' }}
-    >
-      <div style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 2,
-        background: msg.is_favorited
-          ? 'linear-gradient(90deg, #fbbf24, #f59e0b)'
-          : 'linear-gradient(90deg, #4f8ef7, #a78bfa)',
-        opacity: 0.6,
-      }} />
-
+    <motion.div layout initial={{ opacity: 0, y: 20, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, scale: 0.95, y: -10 }} transition={{ duration: 0.4 }} className="message-card" style={{ padding: '24px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: msg.is_favorited ? 'linear-gradient(90deg, #fbbf24, #f59e0b)' : 'linear-gradient(90deg, #4f8ef7, #a78bfa)', opacity: 0.6 }} />
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
         <div style={{ flex: 1 }}>
-          {msg.emoji_reaction && (
-            <span style={{ fontSize: 20, marginBottom: 8, display: 'block' }}>{msg.emoji_reaction}</span>
-          )}
-          <p style={{
-            margin: 0,
-            fontSize: 15,
-            lineHeight: 1.65,
-            color: 'rgba(232, 232, 240, 0.88)',
-            fontStyle: 'italic',
-          }}>
-            "{msg.content}"
-          </p>
-
+          {msg.emoji_reaction && <span style={{ fontSize: 20, marginBottom: 8, display: 'block' }}>{msg.emoji_reaction}</span>}
+          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, color: 'rgba(232, 232, 240, 0.88)', fontStyle: 'italic' }}>"{msg.content}"</p>
           {msg.public_reply && !showReply && (
-            <div style={{
-              marginTop: 14,
-              padding: '10px 14px',
-              borderRadius: 10,
-              background: 'rgba(79,142,247,0.08)',
-              border: '1px solid rgba(79,142,247,0.2)',
-              fontSize: 13,
-              color: 'rgba(200,200,220,0.7)',
-            }}>
+            <div style={{ marginTop: 14, padding: '10px 14px', borderRadius: 10, background: 'rgba(79,142,247,0.08)', border: '1px solid rgba(79,142,247,0.2)', fontSize: 13, color: 'rgba(200,200,220,0.7)' }}>
               <span style={{ fontSize: 11, color: 'rgba(79,142,247,0.8)', display: 'block', marginBottom: 4, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Your reply</span>
               {msg.public_reply}
             </div>
           )}
-
           <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.35)' }}>
-              <TimeAgo date={msg.created_at} />
-            </span>
-            <button
-              onClick={() => onFavorite(msg.id, !msg.is_favorited)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 13,
-                color: msg.is_favorited ? '#fbbf24' : 'rgba(200,200,220,0.4)',
-                padding: '2px 0',
-                fontFamily: 'Inter, sans-serif',
-                transition: 'color 0.2s ease',
-              }}
-            >
-              {msg.is_favorited ? '★ Favorited' : '☆ Favorite'}
-            </button>
-            <button
-              onClick={() => setShowReply(!showReply)}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: 13,
-                color: 'rgba(79,142,247,0.6)',
-                padding: '2px 0',
-                fontFamily: 'Inter, sans-serif',
-                transition: 'color 0.2s ease',
-              }}
-            >
-              ↩ Reply publicly
-            </button>
+            <span style={{ fontSize: 11, color: 'rgba(200,200,220,0.35)' }}><TimeAgo date={msg.created_at} /></span>
+            <button onClick={() => onFavorite(msg.id, !msg.is_favorited)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: msg.is_favorited ? '#fbbf24' : 'rgba(200,200,220,0.4)', padding: '2px 0', fontFamily: 'Inter, sans-serif', transition: 'color 0.2s ease' }}>{msg.is_favorited ? '★ Favorited' : '☆ Favorite'}</button>
+            <button onClick={() => setShowReply(!showReply)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: 'rgba(79,142,247,0.6)', padding: '2px 0', fontFamily: 'Inter, sans-serif', transition: 'color 0.2s ease' }}>↩ Reply publicly</button>
           </div>
-
           <AnimatePresence>
             {showReply && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                style={{ marginTop: 14, overflow: 'hidden' }}
-              >
-                <textarea
-                  className="whisper-textarea"
-                  style={{ minHeight: 80, fontSize: 13 }}
-                  placeholder="Write a public reply (sender won't know it's you responding)..."
-                  value={replyText}
-                  onChange={e => setReplyText(e.target.value)}
-                />
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} style={{ marginTop: 14, overflow: 'hidden' }}>
+                <textarea className="whisper-textarea" style={{ minHeight: 80, fontSize: 13 }} placeholder="Write a public reply..." value={replyText} onChange={e => setReplyText(e.target.value)} />
                 <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                  <button
-                    className="whisper-btn whisper-btn-primary"
-                    onClick={saveReply}
-                    disabled={saving}
-                    style={{ padding: '8px 20px', fontSize: 13 }}
-                  >
-                    {saving ? 'Saving...' : 'Post reply'}
-                  </button>
-                  <button
-                    className="whisper-btn whisper-btn-ghost"
-                    onClick={() => setShowReply(false)}
-                    style={{ padding: '8px 16px', fontSize: 13 }}
-                  >
-                    Cancel
-                  </button>
+                  <button className="whisper-btn whisper-btn-primary" onClick={saveReply} disabled={saving} style={{ padding: '8px 20px', fontSize: 13 }}>{saving ? 'Saving...' : 'Post reply'}</button>
+                  <button className="whisper-btn whisper-btn-ghost" onClick={() => setShowReply(false)} style={{ padding: '8px 16px', fontSize: 13 }}>Cancel</button>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
-
-        <button
-          onClick={() => onDelete(msg.id)}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: 'rgba(200,200,220,0.2)',
-            fontSize: 16,
-            padding: 4,
-            transition: 'color 0.2s ease',
-            flexShrink: 0,
-          }}
-          title="Delete message"
-          onMouseEnter={e => (e.currentTarget.style.color = 'rgba(248, 113, 113, 0.7)')}
-          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(200,200,220,0.2)')}
-        >
-          ✕
-        </button>
+        <button onClick={() => onDelete(msg.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(200,200,220,0.2)', fontSize: 16, padding: 4, transition: 'color 0.2s ease', flexShrink: 0 }} title="Delete message" onMouseEnter={e => (e.currentTarget.style.color = 'rgba(248, 113, 113, 0.7)')} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(200,200,220,0.2)')}>✕</button>
       </div>
     </motion.div>
   );
 }
 
-// Notification Bell Icon (CSS-drawn, no emoji)
 function BellIcon({ active }: { active: boolean }) {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill={active ? '#a78bfa' : 'rgba(200,200,220,0.5)'} stroke={active ? '#a78bfa' : 'rgba(200,200,220,0.5)'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'all 0.2s ease' }}>
@@ -221,189 +108,86 @@ export default function DashboardPage() {
   const [pushSubscribed, setPushSubscribed] = useState(false);
   const lastMessageId = useRef<string | null>(null);
 
-  // Request notification permission
-  useEffect(() => {
-    if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-      Notification.requestPermission();
-    }
-  }, []);
-
-  // Check Pushpad subscription status on load
-  useEffect(() => {
-    const checkPushpad = () => {
-      if ((window as any).Pushpad) {
-        (window as any).Pushpad.isSubscribed().then((subscribed: boolean) => {
-          setPushSubscribed(subscribed);
-        });
-      }
-    };
-    // Check immediately and also after a delay for script load
-    checkPushpad();
-    const t = setTimeout(checkPushpad, 3000);
-    return () => clearTimeout(t);
-  }, []);
-
   useEffect(() => {
     if (!authLoading && !user) navigate('/auth');
   }, [user, authLoading, navigate]);
 
+  // Check push subscription status
+  useEffect(() => {
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      navigator.serviceWorker.ready.then(reg => {
+        reg.pushManager.getSubscription().then(sub => {
+          setPushSubscribed(!!sub);
+        });
+      });
+    }
+  }, []);
+
   const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-
     const ensuredProfile = await ensureUserProfile(user);
-
     const [profileRes, msgRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', user.id).maybeSingle(),
-      supabase.from('messages')
-        .select('*')
-        .eq('recipient_id', user.id)
-        .eq('is_deleted', false)
-        .order('created_at', { ascending: false }),
+      supabase.from('messages').select('*').eq('recipient_id', user.id).eq('is_deleted', false).order('created_at', { ascending: false }),
     ]);
-
-    if (profileRes.data) {
-      setProfile(profileRes.data);
-      setBio(profileRes.data.bio || '');
-    } else if (ensuredProfile) {
-      setProfile(ensuredProfile as Profile);
-      setBio(ensuredProfile.bio || '');
-    }
-    if (msgRes.data) {
-      setMessages(msgRes.data);
-      if (msgRes.data.length > 0) {
-        lastMessageId.current = msgRes.data[0].id;
-      }
-    }
+    if (profileRes.data) { setProfile(profileRes.data); setBio(profileRes.data.bio || ''); }
+    else if (ensuredProfile) { setProfile(ensuredProfile as Profile); setBio(ensuredProfile.bio || ''); }
+    if (msgRes.data) { setMessages(msgRes.data); if (msgRes.data.length > 0) lastMessageId.current = msgRes.data[0].id; }
     setLoading(false);
   }, [user]);
 
-  useEffect(() => {
-    if (user) loadData();
-  }, [user, loadData]);
+  useEffect(() => { if (user) loadData(); }, [user, loadData]);
 
-  // Polling for new messages every 5 seconds
+  // Polling
   useEffect(() => {
     if (!user) return;
-
     const poll = setInterval(async () => {
       try {
-        const { data } = await supabase
-          .from('messages')
-          .select('*')
-          .eq('recipient_id', user.id)
-          .eq('is_deleted', false)
-          .order('created_at', { ascending: false })
-          .limit(1);
-
+        const { data } = await supabase.from('messages').select('*').eq('recipient_id', user.id).eq('is_deleted', false).order('created_at', { ascending: false }).limit(1);
         if (data && data.length > 0 && data[0].id !== lastMessageId.current) {
           const newMsg = data[0] as Message;
           lastMessageId.current = newMsg.id;
-          
-          setMessages(prev => {
-            const exists = prev.find(m => m.id === newMsg.id);
-            if (!exists) {
-              if (Notification.permission === 'granted') {
-                new Notification('New Whisper 💌', {
-                  body: newMsg.content,
-                  icon: 'https://9crwhisper.vercel.app/favicon.png',
-                });
-              }
-              showToast('✨ A new whisper arrived');
-              return [newMsg, ...prev];
-            }
-            return prev;
-          });
+          setMessages(prev => { if (!prev.find(m => m.id === newMsg.id)) { showToast('✨ A new whisper arrived'); return [newMsg, ...prev]; } return prev; });
         }
-      } catch (err) {
-        // Silently fail
-      }
+      } catch (err) {}
     }, 5000);
-
     return () => clearInterval(poll);
   }, [user]);
 
-  // Pushpad subscribe / unsubscribe
-  const handleToggleNotifications = () => {
-    if (!(window as any).Pushpad) {
-      showToast('Notification service loading... Try again in a moment.');
-      return;
-    }
-
-    if (pushSubscribed) {
-      (window as any).Pushpad.unsubscribe().then(() => {
-        setPushSubscribed(false);
-        showToast('🔕 Notifications disabled');
-      });
-    } else {
-      (window as any).Pushpad.subscribe().then((subscribed: boolean) => {
-        setPushSubscribed(subscribed);
-        if (subscribed) {
-          showToast('🔔 Notifications enabled!');
-        } else {
-          showToast('❌ Subscription failed. Please allow notifications in your browser settings.');
-        }
-      });
-    }
-  };
-
-  const showToast = (msg: string) => {
-    setToast(msg);
-    setTimeout(() => setToast(''), 3000);
-  };
-
-  const profileUrl = profile?.username
-    ? `${window.location.origin}/u/${profile.username}`
-    : '';
-
-  const copyLink = async () => {
-    if (!profileUrl) {
-      showToast('Profile still loading...');
+  const handleToggleNotifications = async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      showToast('Notifications not supported on this device');
       return;
     }
     try {
-      await navigator.clipboard.writeText(profileUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-      showToast('Link copied to clipboard ✓');
-    } catch {
-      showToast('Could not copy. Please copy the link manually.');
+      if (pushSubscribed) {
+        const reg = await navigator.serviceWorker.ready;
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) { await sub.unsubscribe(); setPushSubscribed(false); showToast('🔕 Notifications disabled'); }
+      } else {
+        const reg = await navigator.serviceWorker.register('/sw.js');
+        const sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: 'BEl62iNhYf6hQlZQ3kPjL2fNqGqP9WzV5vDcH6Xn0o4eYsR1tU8wJpLmA3bF5gKjH9cDvN2xZ1qW4eR7yU0',
+        });
+        setPushSubscribed(true);
+        showToast('🔔 Notifications enabled!');
+      }
+    } catch (err) {
+      showToast('Failed to toggle notifications');
     }
   };
 
-  const handleFavorite = async (id: string, val: boolean) => {
-    setMessages(prev => prev.map(m => m.id === id ? { ...m, is_favorited: val } : m));
-    await supabase.from('messages').update({ is_favorited: val }).eq('id', id);
-  };
-
-  const handleDelete = async (id: string) => {
-    setMessages(prev => prev.filter(m => m.id !== id));
-    await supabase.from('messages').update({ is_deleted: true }).eq('id', id);
-  };
-
-  const handleReply = (updated: Message) => {
-    setMessages(prev => prev.map(m => m.id === updated.id ? updated : m));
-  };
-
-  const saveBio = async () => {
-    if (!user) return;
-    setSavingBio(true);
-    await supabase.from('profiles').update({ bio }).eq('id', user.id);
-    setSavingBio(false);
-    setShowSettings(false);
-    showToast('Profile updated ✓');
-    if (profile) setProfile({ ...profile, bio });
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
-  };
-
-  const displayedMessages = filter === 'favorites'
-    ? messages.filter(m => m.is_favorited)
-    : messages;
-
+  const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(''), 3000); };
+  const profileUrl = profile?.username ? `${window.location.origin}/u/${profile.username}` : '';
+  const copyLink = async () => { if (!profileUrl) { showToast('Profile still loading...'); return; } try { await navigator.clipboard.writeText(profileUrl); setCopied(true); setTimeout(() => setCopied(false), 2500); showToast('Link copied to clipboard ✓'); } catch { showToast('Could not copy.'); } };
+  const handleFavorite = async (id: string, val: boolean) => { setMessages(prev => prev.map(m => m.id === id ? { ...m, is_favorited: val } : m)); await supabase.from('messages').update({ is_favorited: val }).eq('id', id); };
+  const handleDelete = async (id: string) => { setMessages(prev => prev.filter(m => m.id !== id)); await supabase.from('messages').update({ is_deleted: true }).eq('id', id); };
+  const handleReply = (updated: Message) => { setMessages(prev => prev.map(m => m.id === updated.id ? updated : m)); };
+  const saveBio = async () => { if (!user) return; setSavingBio(true); await supabase.from('profiles').update({ bio }).eq('id', user.id); setSavingBio(false); setShowSettings(false); showToast('Profile updated ✓'); if (profile) setProfile({ ...profile, bio }); };
+  const handleSignOut = async () => { await supabase.auth.signOut(); navigate('/'); };
+  const displayedMessages = filter === 'favorites' ? messages.filter(m => m.is_favorited) : messages;
   const shareLinks = profile ? [
     { label: 'Instagram', url: `https://www.instagram.com/`, icon: '📷' },
     { label: 'X / Twitter', url: `https://x.com/intent/tweet?text=Send+me+an+anonymous+message+%F0%9F%8C%99&url=${encodeURIComponent(profileUrl)}`, icon: '𝕏' },
@@ -426,51 +210,33 @@ export default function DashboardPage() {
   return (
     <div className="page-wrapper" style={{ background: '#060614' }}>
       <CosmicCanvas theme={(profile?.mood_theme as 'cosmic' | 'aurora' | 'nebula' | 'celestial') || 'cosmic'} />
-
       <nav className="whisper-nav">
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
-          <div style={{
-            width: 32, height: 32,
-            background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)',
-            borderRadius: 10,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 16,
-          }}>✦</div>
+          <div style={{ width: 32, height: 32, background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16 }}>✦</div>
           <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 600 }}>Whisper</span>
         </Link>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <button onClick={() => setShowSettings(!showSettings)} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>
-            ⚙ Settings
-          </button>
-          <button onClick={handleSignOut} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>
-            Sign out
-          </button>
+          <button onClick={() => setShowSettings(!showSettings)} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>⚙ Settings</button>
+          <button onClick={handleSignOut} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>Sign out</button>
         </div>
       </nav>
 
       <div style={{ maxWidth: 760, margin: '0 auto', padding: '88px 20px 80px', position: 'relative', zIndex: 3 }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass" style={{ padding: '32px', borderRadius: 28, marginBottom: 24, textAlign: 'center' }}>
-          <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, margin: '0 auto 16px', boxShadow: '0 0 30px rgba(79,142,247,0.4)' }}>
-            {(profile?.display_name || '?')[0].toUpperCase()}
-          </div>
+          <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, #4f8ef7, #a78bfa)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, margin: '0 auto 16px', boxShadow: '0 0 30px rgba(79,142,247,0.4)' }}>{(profile?.display_name || '?')[0].toUpperCase()}</div>
           <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4 }}>{profile?.display_name || profile?.username}</h1>
           <p style={{ fontSize: 14, color: 'rgba(200,200,220,0.5)', marginBottom: profile?.bio ? 12 : 20 }}>@{profile?.username}</p>
           {profile?.bio && <p style={{ fontSize: 14, color: 'rgba(200,200,220,0.65)', marginBottom: 20, fontStyle: 'italic', maxWidth: 380, margin: '0 auto 20px' }}>{profile.bio}</p>}
-
           <div style={{ display: 'flex', justifyContent: 'center', gap: 32, marginBottom: 24 }}>
             <div style={{ textAlign: 'center' }}><div style={{ fontSize: 24, fontWeight: 700, color: '#a78bfa' }}>{profile?.message_count || 0}</div><div style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Whispers</div></div>
             <div style={{ textAlign: 'center' }}><div style={{ fontSize: 24, fontWeight: 700, color: '#fbbf24' }}>{profile?.streak_days || 0}</div><div style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Day streak</div></div>
             <div style={{ textAlign: 'center' }}><div style={{ fontSize: 24, fontWeight: 700, color: '#34d399' }}>{messages.filter(m => m.is_favorited).length}</div><div style={{ fontSize: 11, color: 'rgba(200,200,220,0.4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Favorites</div></div>
           </div>
-
           <div style={{ display: 'flex', gap: 8, maxWidth: 460, margin: '0 auto' }}>
             <div style={{ flex: 1, padding: '11px 16px', borderRadius: 12, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', fontSize: 13, color: 'rgba(200,200,220,0.6)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{profileUrl || 'Loading your link...'}</div>
             <button className="whisper-btn whisper-btn-primary" onClick={copyLink} disabled={!profileUrl} style={{ padding: '11px 20px', fontSize: 13, whiteSpace: 'nowrap', flexShrink: 0, opacity: profileUrl ? 1 : 0.5 }}>{copied ? '✓ Copied' : 'Copy link'}</button>
           </div>
-
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 12, flexWrap: 'wrap' }}>
-            {shareLinks.map(s => <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="whisper-btn whisper-btn-ghost" style={{ padding: '7px 14px', fontSize: 12, gap: 6 }}><span>{s.icon}</span> {s.label}</a>)}
-          </div>
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 12, flexWrap: 'wrap' }}>{shareLinks.map(s => <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" className="whisper-btn whisper-btn-ghost" style={{ padding: '7px 14px', fontSize: 12, gap: 6 }}><span>{s.icon}</span> {s.label}</a>)}</div>
         </motion.div>
 
         <AnimatePresence>
@@ -479,40 +245,19 @@ export default function DashboardPage() {
               <div style={{ padding: '24px' }}>
                 <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16 }}>Profile Settings</h3>
                 <label style={{ fontSize: 12, color: 'rgba(200,200,220,0.55)', display: 'block', marginBottom: 6, fontWeight: 500, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Bio</label>
-                <textarea className="whisper-textarea" style={{ minHeight: 80, fontSize: 14 }} placeholder="A short description that appears on your profile..." value={bio} onChange={e => setBio(e.target.value)} maxLength={160} />
-                
-                {/* Notification toggle inside settings */}
+                <textarea className="whisper-textarea" style={{ minHeight: 80, fontSize: 14 }} placeholder="A short description..." value={bio} onChange={e => setBio(e.target.value)} maxLength={160} />
                 <div style={{ marginTop: 20, padding: '16px', borderRadius: 12, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                       <BellIcon active={pushSubscribed} />
                       <div>
                         <p style={{ margin: 0, fontSize: 14, fontWeight: 500, color: '#e8e8f0' }}>Push Notifications</p>
-                        <p style={{ margin: 0, fontSize: 11, color: 'rgba(200,200,220,0.4)' }}>
-                          {pushSubscribed ? 'You will receive notifications for new whispers' : 'Get notified when someone sends you a message'}
-                        </p>
+                        <p style={{ margin: 0, fontSize: 11, color: 'rgba(200,200,220,0.4)' }}>{pushSubscribed ? 'You will receive notifications for new whispers' : 'Get notified when someone sends you a message'}</p>
                       </div>
                     </div>
-                    <button
-                      onClick={handleToggleNotifications}
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: 20,
-                        border: 'none',
-                        cursor: 'pointer',
-                        fontSize: 12,
-                        fontWeight: 600,
-                        fontFamily: 'Inter, sans-serif',
-                        background: pushSubscribed ? 'rgba(167,139,250,0.2)' : 'rgba(79,142,247,0.3)',
-                        color: pushSubscribed ? '#a78bfa' : '#7eb3fa',
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      {pushSubscribed ? 'Disable' : 'Enable'}
-                    </button>
+                    <button onClick={handleToggleNotifications} style={{ padding: '8px 16px', borderRadius: 20, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, fontFamily: 'Inter, sans-serif', background: pushSubscribed ? 'rgba(167,139,250,0.2)' : 'rgba(79,142,247,0.3)', color: pushSubscribed ? '#a78bfa' : '#7eb3fa', transition: 'all 0.2s ease' }}>{pushSubscribed ? 'Disable' : 'Enable'}</button>
                   </div>
                 </div>
-
                 <div style={{ display: 'flex', gap: 10, marginTop: 16 }}>
                   <button className="whisper-btn whisper-btn-primary" onClick={saveBio} disabled={savingBio} style={{ padding: '10px 24px', fontSize: 13 }}>{savingBio ? 'Saving...' : 'Save changes'}</button>
                   <button className="whisper-btn whisper-btn-ghost" onClick={() => setShowSettings(false)} style={{ padding: '10px 20px', fontSize: 13 }}>Cancel</button>
@@ -539,15 +284,10 @@ export default function DashboardPage() {
             {filter === 'all' && <button className="whisper-btn whisper-btn-primary" onClick={copyLink} disabled={!profileUrl} style={{ fontSize: 14, opacity: profileUrl ? 1 : 0.5 }}>Copy my link ✦</button>}
           </motion.div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <AnimatePresence>{displayedMessages.map(msg => <MessageCard key={msg.id} msg={msg} onFavorite={handleFavorite} onDelete={handleDelete} onReply={handleReply} />)}</AnimatePresence>
-          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}><AnimatePresence>{displayedMessages.map(msg => <MessageCard key={msg.id} msg={msg} onFavorite={handleFavorite} onDelete={handleDelete} onReply={handleReply} />)}</AnimatePresence></div>
         )}
       </div>
-
-      <AnimatePresence>
-        {toast && <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="whisper-toast">{toast}</motion.div>}
-      </AnimatePresence>
+      <AnimatePresence>{toast && <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} className="whisper-toast">{toast}</motion.div>}</AnimatePresence>
     </div>
   );
 }
