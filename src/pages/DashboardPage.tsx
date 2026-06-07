@@ -208,7 +208,6 @@ export default function DashboardPage() {
   const [bio, setBio] = useState('');
   const [savingBio, setSavingBio] = useState(false);
 
-  // ─── Request notification permission on dashboard open ──────────
   useEffect(() => {
     if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
       Notification.requestPermission();
@@ -257,7 +256,6 @@ export default function DashboardPage() {
     if (user) loadData();
   }, [user, loadData]);
 
-  // Real-time subscription with native browser notification
   useEffect(() => {
     if (!user) return;
     const channel = supabase
@@ -271,9 +269,16 @@ export default function DashboardPage() {
         setMessages(prev => [payload.new as Message, ...prev]);
         showToast('✨ A new whisper arrived');
 
-        // Browser notification
         if (Notification.permission === 'granted') {
           new Notification('New Whisper 💌', {
+            body: (payload.new as Message).content,
+            icon: 'https://9crwhisper.vercel.app/favicon.png',
+          });
+        }
+
+        if ((window as any).pushpad) {
+          (window as any).pushpad.push({
+            title: 'New Whisper 💌',
             body: (payload.new as Message).content,
             icon: 'https://9crwhisper.vercel.app/favicon.png',
           });
