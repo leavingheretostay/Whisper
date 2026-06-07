@@ -29,6 +29,9 @@
             enable: true,
           },
         });
+        OneSignal.User.PushSubscription.addEventListener('change', function(pushSubscription) {
+          console.log("Push subscription state:", pushSubscription.current?.type);
+        });
       });
     </script>
   </head>
