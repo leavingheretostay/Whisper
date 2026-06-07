@@ -7,6 +7,12 @@ import type { Profile, Message } from '../lib/types';
 import CosmicCanvas from '../components/CosmicCanvas';
 import { ensureUserProfile } from '../lib/profile';
 
+declare global {
+  interface Window {
+    pushpad: any;
+  }
+}
+
 const EMOJIS = ['💫', '🌙', '✨', '💌', '🌌', '⭐', '🔮', '🌊'];
 
 const DAILY_PROMPTS = [
@@ -208,6 +214,15 @@ export default function DashboardPage() {
   const [bio, setBio] = useState('');
   const [savingBio, setSavingBio] = useState(false);
 
+  // ─── Pushpad subscription ──────────────────────────────────────
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.pushpad) {
+      window.pushpad.subscribe((isSubscribed: boolean) => {
+        console.log('Push notifications subscribed:', isSubscribed);
+      });
+    }
+  }, []);
+
   useEffect(() => {
     if (!authLoading && !user) navigate('/auth');
   }, [user, authLoading, navigate]);
@@ -250,7 +265,7 @@ export default function DashboardPage() {
     if (user) loadData();
   }, [user, loadData]);
 
-  // Real-time subscription
+  // Real-time subscription with Pushpad notification
   useEffect(() => {
     if (!user) return;
     const channel = supabase
@@ -263,6 +278,15 @@ export default function DashboardPage() {
       }, payload => {
         setMessages(prev => [payload.new as Message, ...prev]);
         showToast('✨ A new whisper arrived');
+
+        // Send Pushpad notification
+        if (window.pushpad) {
+          window.pushpad.push({
+            title: 'New Whisper 💌',
+            body: (payload.new as Message).content,
+            icon: 'https://9crwhisper.vercel.app/favicon.png',
+          });
+        }
       })
       .subscribe();
 
