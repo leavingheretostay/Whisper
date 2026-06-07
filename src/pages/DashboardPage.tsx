@@ -276,7 +276,6 @@ export default function DashboardPage() {
           setMessages(prev => {
             const exists = prev.find(m => m.id === newMsg.id);
             if (!exists) {
-              // Show notification
               if (Notification.permission === 'granted') {
                 new Notification('New Whisper 💌', {
                   body: newMsg.content,
@@ -290,12 +289,31 @@ export default function DashboardPage() {
           });
         }
       } catch (err) {
-        // Silently fail - polling will retry
+        // Silently fail
       }
     }, 5000);
 
     return () => clearInterval(poll);
   }, [user]);
+
+  // Pushpad subscribe function
+  const handleEnableNotifications = () => {
+    if ((window as any).Pushpad) {
+      const pushpad = new (window as any).Pushpad({
+        projectId: 9153,
+        serviceWorkerPath: '/pushpad-worker.js',
+      });
+      pushpad.subscribe((subscribed: boolean) => {
+        if (subscribed) {
+          showToast('🔔 Notifications enabled!');
+        } else {
+          showToast('❌ Subscription failed');
+        }
+      });
+    } else {
+      showToast('Pushpad not loaded yet. Refresh and try again.');
+    }
+  };
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -389,8 +407,15 @@ export default function DashboardPage() {
           <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 600 }}>Whisper</span>
         </Link>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-          <button onClick={() => setShowSettings(!showSettings)} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>⚙ Settings</button>
-          <button onClick={handleSignOut} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>Sign out</button>
+          <button onClick={handleEnableNotifications} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>
+            🔔 Enable
+          </button>
+          <button onClick={() => setShowSettings(!showSettings)} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>
+            ⚙ Settings
+          </button>
+          <button onClick={handleSignOut} className="whisper-btn whisper-btn-ghost" style={{ padding: '8px 16px', fontSize: 13 }}>
+            Sign out
+          </button>
         </div>
       </nav>
 
